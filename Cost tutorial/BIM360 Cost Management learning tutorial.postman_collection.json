@@ -14,6 +14,9 @@
 					"script": {
 						"id": "0400edee-9407-4539-a629-7f92f73ce24e",
 						"exec": [
+							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+							"",
+							"// setup the environment variable \"hub_id\"",
 							"var responseBody = JSON.parse(responseBody);",
 							"for ( var index in responseBody.data) {",
 							"    console.log( index );",
@@ -52,6 +55,9 @@
 					"script": {
 						"id": "511e384b-691e-40a2-9fe5-716e82dd7274",
 						"exec": [
+							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+							"",
+							"// setup the environment variable \"project_id\"",
 							"var responseBody = JSON.parse(responseBody);",
 							"for ( var index in responseBody.data) {",
 							"    if(responseBody.data[index].attributes.name == \"Sample Project used to test by Zhong\"){",
@@ -91,6 +97,9 @@
 					"script": {
 						"id": "25d5a645-4c36-4dd6-82a9-3c26136f9985",
 						"exec": [
+							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+							"",
+							"// setup the environment variable \"cost_container_id\"",
 							"var responseBody = JSON.parse(responseBody);",
 							"postman.setEnvironmentVariable(\"cost_container_id\", responseBody.data.relationships.cost.data.id);"
 						],
@@ -126,6 +135,9 @@
 					"script": {
 						"id": "46ec695e-7cdf-42c4-b69d-678f48fc65c7",
 						"exec": [
+							"pm.test(\"Status code is 201\", function () { pm.response.to.have.status(201); });",
+							"",
+							"// setup the environment variable \"budget_id\"",
 							"var data = JSON.parse(responseBody);",
 							"postman.setEnvironmentVariable(\"budget_id\", data.id);",
 							""
@@ -176,6 +188,9 @@
 					"script": {
 						"id": "cfca5644-3012-4e47-af4d-9e20bf186a36",
 						"exec": [
+							"pm.test(\"Status code is 201\", function () { pm.response.to.have.status(201); });",
+							"",
+							"// setup the environment variable \"contract_id\"",
 							"var data = JSON.parse(responseBody);",
 							"postman.setEnvironmentVariable(\"contract_id\", data.id);",
 							""
@@ -220,6 +235,9 @@
 					"script": {
 						"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
 						"exec": [
+							"pm.test(\"Status code is 201\", function () { pm.response.to.have.status(201); });",
+							"",
+							"// setup the environment variable \"costItem_id\"",
 							"var responseBody = JSON.parse(responseBody);",
 							"postman.setEnvironmentVariable(\"costItem_id\", responseBody.id);",
 							""
@@ -265,6 +283,9 @@
 					"script": {
 						"id": "7d16a9a4-c870-4cb6-9a45-f2c83c9916fd",
 						"exec": [
+							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+							"",
+							"// setup the environment variable \"changeOrder_type\"",
 							"var responseBody = JSON.parse(responseBody);",
 							"postman.setEnvironmentVariable(\"changeOrder_type\", responseBody[2].type);",
 							""
@@ -306,6 +327,9 @@
 					"script": {
 						"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
 						"exec": [
+							"pm.test(\"Status code is 201\", function () { pm.response.to.have.status(201); });",
+							"",
+							"// setup the environment variable \"changeOrder_id\"",
 							"var responseBody = JSON.parse(responseBody);",
 							"postman.setEnvironmentVariable(\"changeOrder_id\", responseBody.id);",
 							""
@@ -352,6 +376,8 @@
 					"script": {
 						"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
 						"exec": [
+							"pm.test(\"Status code is 201\", function () { pm.response.to.have.status(201); });",
+							"",
 							""
 						],
 						"type": "text/javascript"
@@ -395,6 +421,9 @@
 					"script": {
 						"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
 						"exec": [
+							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+							"",
+							"// setup the environment variable \"action_name\"",
 							"var responseBody = JSON.parse(responseBody);",
 							"postman.setEnvironmentVariable(\"action_name\", responseBody[0].name);",
 							""
@@ -464,7 +493,9 @@
 					"script": {
 						"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
 						"exec": [
-							""
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});"
 						],
 						"type": "text/javascript"
 					}
@@ -513,7 +544,7 @@
 		"oauth2": [
 			{
 				"key": "accessToken",
-				"value": "eyJhbGciOiJIUzI1NiIsImtpZCI6Imp3dF9zeW1tZXRyaWNfa2V5In0.eyJ1c2VyaWQiOiI0VjRXS1FKR0dRN04iLCJleHAiOjE1NzYxMDMwMjksInNjb3BlIjpbImRhdGE6cmVhZCIsImRhdGE6d3JpdGUiXSwiY2xpZW50X2lkIjoia0p0YkxZS2dHUjlOazh4MFZxbHJjMlkwM0lINXU5bFAiLCJncmFudF9pZCI6IkNYc2htVGVGRWRLR3NBQnNCZnQ4a2RReUp6WTI5SEN5IiwiYXVkIjoiaHR0cHM6Ly9hdXRvZGVzay5jb20vYXVkL2p3dGV4cDYwIiwianRpIjoiQ1hpNnl6MWlwQUhiVnV5aE1DZlE3aFJPYXR5alVIbUlFOHNFQUI4Z2hjbklqRThCNTNJVVpWMnhBNzc3TmdqWiJ9.z8T8-QHxEhuDyEqvdAsLNh4YEzmOUd1hdbs3tNVRHVk",
+				"value": "eyJhbGciOiJIUzI1NiIsImtpZCI6Imp3dF9zeW1tZXRyaWNfa2V5In0.eyJ1c2VyaWQiOiI0VjRXS1FKR0dRN04iLCJleHAiOjE1NzYxMDc3NzAsInNjb3BlIjpbImRhdGE6cmVhZCIsImRhdGE6d3JpdGUiXSwiY2xpZW50X2lkIjoia0p0YkxZS2dHUjlOazh4MFZxbHJjMlkwM0lINXU5bFAiLCJncmFudF9pZCI6IndVdHltNEQ4N0h5aVJTQ0prSE96UWwwQ1hQbDFJRmhiIiwiYXVkIjoiaHR0cHM6Ly9hdXRvZGVzay5jb20vYXVkL2p3dGV4cDYwIiwianRpIjoiVUNaN1VmSTNBNmtPajJtc2N4S1NNZE5VNG5JMmlPU01IUms5bzVuTHdwRERRdHRlZG53cVpZZmNlN2FqaEJUNCJ9.6RMq-hqMWSZHu2pCmwIG_BeR9NKyNO_Ax5HpoGG-vc8",
 				"type": "string"
 			},
 			{
