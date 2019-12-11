@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "e1910588-c4c1-4401-90b3-201cb25270fe",
 		"name": "BIM360 Cost Management learning tutorial",
-		"description": "The collection together with the environment shows you how to create a new budget with contract, and also create a change order with a couple of cost items, then you can use the available \"Action\" applied on the change order to change the status of the change order.",
+		"description": "The collection together with the environment shows you how to create a new budget with contract, and also create a change order with a couple of cost items, then you can use the available \"Action\" applied on the change order to change the status of the change order.\n\nSteps to operate with the endpoints:\n1. Before using the collection, please add the Authorization for the collection, click \"Edit Collection\", go to \"Authorization\" tab, make sure to use \"OAuth 2.0\" to get a 3 legged token, and use it in the \"Request Headers\".\n\n2. Follow step 1 to step 5 to create a budget which assigned to a contract, also create a cost item that will be attached to change orders in the following step.\n\n3. Iterate to do step 6 ~ step 11 to create different change order and perform action on that.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -213,7 +213,52 @@
 			"response": []
 		},
 		{
-			"name": "Step 6: Find change order types",
+			"name": "Step 6: Create a new cost item and assign to a budget",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
+						"exec": [
+							"var responseBody = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"costItem_id\", responseBody.id);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n        \"name\": \"My 1st cost item\",\n        \"description\": \"1st cost item\",\n        \"estimated\": \"1000.0000\",\n        \"proposed\": \"1000.0000\",\n        \"submitted\": \"1000.0000\",\n        \"approved\": \"1000.0000\",\n        \"committed\": \"1000.0000\",\n        \"budgetId\": \"{{budget_id}}\"\n      }"
+				},
+				"url": {
+					"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/cost-items",
+					"host": [
+						"{{base_domain}}cost"
+					],
+					"path": [
+						"v1",
+						"containers",
+						"{{cost_container_id}}",
+						"cost-items"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Step 7: Find change order types",
 			"event": [
 				{
 					"listen": "test",
@@ -221,7 +266,7 @@
 						"id": "7d16a9a4-c870-4cb6-9a45-f2c83c9916fd",
 						"exec": [
 							"var responseBody = JSON.parse(responseBody);",
-							"postman.setEnvironmentVariable(\"changeOrder_type\", responseBody[0].type);",
+							"postman.setEnvironmentVariable(\"changeOrder_type\", responseBody[2].type);",
 							""
 						],
 						"type": "text/javascript"
@@ -254,7 +299,7 @@
 			"response": []
 		},
 		{
-			"name": "Step 7: Create a new change order",
+			"name": "Step 8: Create a new change order",
 			"event": [
 				{
 					"listen": "test",
@@ -294,51 +339,6 @@
 						"{{cost_container_id}}",
 						"change-orders",
 						"{{changeOrder_type}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Step 8: Create a new cost item and assign to a budget",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
-						"exec": [
-							"var responseBody = JSON.parse(responseBody);",
-							"postman.setEnvironmentVariable(\"costItem_id\", responseBody.id);",
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"name": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n        \"name\": \"My 1st cost item\",\n        \"description\": \"1st cost item\",\n        \"estimated\": \"1000.0000\",\n        \"proposed\": \"1000.0000\",\n        \"submitted\": \"1000.0000\",\n        \"approved\": \"1000.0000\",\n        \"committed\": \"1000.0000\",\n        \"budgetId\": \"{{budget_id}}\"\n      }"
-				},
-				"url": {
-					"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/cost-items",
-					"host": [
-						"{{base_domain}}cost"
-					],
-					"path": [
-						"v1",
-						"containers",
-						"{{cost_container_id}}",
-						"cost-items"
 					]
 				}
 			},
