@@ -1,0 +1,554 @@
+{
+	"info": {
+		"_postman_id": "e1910588-c4c1-4401-90b3-201cb25270fe",
+		"name": "BIM360 Cost Management learning tutorial",
+		"description": "The collection together with the environment shows you how to create a new budget with contract, and also create a change order with a couple of cost items, then you can use the available \"Action\" applied on the change order to change the status of the change order.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Step 1: Find all hubs within your account",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0400edee-9407-4539-a629-7f92f73ce24e",
+						"exec": [
+							"var responseBody = JSON.parse(responseBody);",
+							"for ( var index in responseBody.data) {",
+							"    console.log( index );",
+							"    if(responseBody.data[index].id.indexOf(\"b.\") != -1){",
+							"        postman.setEnvironmentVariable(\"hub_id\", responseBody.data[index].id);",
+							"    }",
+							"}",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_domain}}/project/v1/hubs",
+					"host": [
+						"{{base_domain}}"
+					],
+					"path": [
+						"project",
+						"v1",
+						"hubs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Step 2: Find projects within a BIM360 hub",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "511e384b-691e-40a2-9fe5-716e82dd7274",
+						"exec": [
+							"var responseBody = JSON.parse(responseBody);",
+							"for ( var index in responseBody.data) {",
+							"    if(responseBody.data[index].attributes.name == \"Sample Project used to test by Zhong\"){",
+							"        postman.setEnvironmentVariable(\"project_id\", responseBody.data[index].id);",
+							"    }",
+							"}",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_domain}}/project/v1/hubs/{{hub_id}}/projects",
+					"host": [
+						"{{base_domain}}"
+					],
+					"path": [
+						"project",
+						"v1",
+						"hubs",
+						"{{hub_id}}",
+						"projects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Step 3: Get the project and setup cost container id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "25d5a645-4c36-4dd6-82a9-3c26136f9985",
+						"exec": [
+							"var responseBody = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"cost_container_id\", responseBody.data.relationships.cost.data.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_domain}}/project/v1/hubs/{{hub_id}}/projects/{{project_id}}",
+					"host": [
+						"{{base_domain}}"
+					],
+					"path": [
+						"project",
+						"v1",
+						"hubs",
+						"{{hub_id}}",
+						"projects",
+						"{{project_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Step 4: Create a new budget",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "46ec695e-7cdf-42c4-b69d-678f48fc65c7",
+						"exec": [
+							"var data = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"budget_id\", data.id);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n        \"parentId\": null,\n        \"code\": \"200420420378\",\n        \"name\": \"My 1st Budget\",\n        \"description\": \"new\",\n        \"quantity\": 10,\n        \"unitPrice\": \"1000.0000\",\n        \"unit\": \"LS\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/budgets",
+					"host": [
+						"{{base_domain}}cost"
+					],
+					"path": [
+						"v1",
+						"containers",
+						"{{cost_container_id}}",
+						"budgets"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Step 5: Create a new contract and assign to a budget",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cfca5644-3012-4e47-af4d-9e20bf186a36",
+						"exec": [
+							"var data = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"contract_id\", data.id);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\n{\n        \"code\": \"GC-01\",\n        \"name\": \"My 1st Contract\",\n        \"description\": \"Site Management Staff\",\n        \"type\": \"consultant\",\n        \"budgets\": [\n        \t{ \n        \t\t\"id\": \"{{budget_id}}\"\n        \t}\n        ]\n      }"
+				},
+				"url": {
+					"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/contracts",
+					"host": [
+						"{{base_domain}}cost"
+					],
+					"path": [
+						"v1",
+						"containers",
+						"{{cost_container_id}}",
+						"contracts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Step 6: Find change order types",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "7d16a9a4-c870-4cb6-9a45-f2c83c9916fd",
+						"exec": [
+							"var responseBody = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"changeOrder_type\", responseBody[0].type);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/change-orders",
+					"host": [
+						"{{base_domain}}cost"
+					],
+					"path": [
+						"v1",
+						"containers",
+						"{{cost_container_id}}",
+						"change-orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Step 7: Create a new change order",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
+						"exec": [
+							"var responseBody = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"changeOrder_id\", responseBody.id);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"My 1st PCO\",\n\t\"description\": \"1st PCO\",\n    \"scopeOfWork\": \"Scope of work\",\n    \"note\": \"note\"\n}"
+				},
+				"url": {
+					"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/change-orders/{{changeOrder_type}}",
+					"host": [
+						"{{base_domain}}cost"
+					],
+					"path": [
+						"v1",
+						"containers",
+						"{{cost_container_id}}",
+						"change-orders",
+						"{{changeOrder_type}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Step 8: Create a new cost item and assign to a budget",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
+						"exec": [
+							"var responseBody = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"costItem_id\", responseBody.id);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n        \"name\": \"My 1st cost item\",\n        \"description\": \"1st cost item\",\n        \"estimated\": \"1000.0000\",\n        \"proposed\": \"1000.0000\",\n        \"submitted\": \"1000.0000\",\n        \"approved\": \"1000.0000\",\n        \"committed\": \"1000.0000\",\n        \"budgetId\": \"{{budget_id}}\"\n      }"
+				},
+				"url": {
+					"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/cost-items",
+					"host": [
+						"{{base_domain}}cost"
+					],
+					"path": [
+						"v1",
+						"containers",
+						"{{cost_container_id}}",
+						"cost-items"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Step 9: Attach a cost Item to a change order",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n        {\n          \"changeOrderId\": \"{{changeOrder_id}}\",\n          \"costItemId\": \"{{costItem_id}}\"\n        }\n]"
+				},
+				"url": {
+					"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/cost-items:attach",
+					"host": [
+						"{{base_domain}}cost"
+					],
+					"path": [
+						"v1",
+						"containers",
+						"{{cost_container_id}}",
+						"cost-items:attach"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Step 10: Get all avialable actions for the change order",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
+						"exec": [
+							"var responseBody = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"action_name\", responseBody[0].name);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "d7d8e12e-2ac3-41cb-8fd4-188c92561507",
+						"exec": [
+							"pm.environment.set(\"association_type\", \"FormInstance\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/workflows/{{association_type}}/{{changeOrder_id}}/actions?",
+					"host": [
+						"{{base_domain}}cost"
+					],
+					"path": [
+						"v1",
+						"containers",
+						"{{cost_container_id}}",
+						"workflows",
+						"{{association_type}}",
+						"{{changeOrder_id}}",
+						"actions"
+					],
+					"query": [
+						{
+							"key": "filter[actionType]",
+							"value": "generateChangeOrder",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Step 11: Execute an action on change order",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n    {\n      \"action\": \"{{action_name}}\",\n      \"associationId\": \"{{changeOrder_id}}\",\n      \"associationType\": \"{{association_type}}\",\n      \"options\": {}\n    }\n]"
+				},
+				"url": {
+					"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/workflows/actions?",
+					"host": [
+						"{{base_domain}}cost"
+					],
+					"path": [
+						"v1",
+						"containers",
+						"{{cost_container_id}}",
+						"workflows",
+						"actions"
+					],
+					"query": [
+						{
+							"key": "filter[name]",
+							"value": "Type",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "oauth2",
+		"oauth2": [
+			{
+				"key": "accessToken",
+				"value": "eyJhbGciOiJIUzI1NiIsImtpZCI6Imp3dF9zeW1tZXRyaWNfa2V5In0.eyJ1c2VyaWQiOiI0VjRXS1FKR0dRN04iLCJleHAiOjE1NzYxMDMwMjksInNjb3BlIjpbImRhdGE6cmVhZCIsImRhdGE6d3JpdGUiXSwiY2xpZW50X2lkIjoia0p0YkxZS2dHUjlOazh4MFZxbHJjMlkwM0lINXU5bFAiLCJncmFudF9pZCI6IkNYc2htVGVGRWRLR3NBQnNCZnQ4a2RReUp6WTI5SEN5IiwiYXVkIjoiaHR0cHM6Ly9hdXRvZGVzay5jb20vYXVkL2p3dGV4cDYwIiwianRpIjoiQ1hpNnl6MWlwQUhiVnV5aE1DZlE3aFJPYXR5alVIbUlFOHNFQUI4Z2hjbklqRThCNTNJVVpWMnhBNzc3TmdqWiJ9.z8T8-QHxEhuDyEqvdAsLNh4YEzmOUd1hdbs3tNVRHVk",
+				"type": "string"
+			},
+			{
+				"key": "tokenType",
+				"value": "Bearer",
+				"type": "string"
+			},
+			{
+				"key": "addTokenTo",
+				"value": "header",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "6461e641-e785-4fdb-9a0a-3657670dfef1",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "3d21282b-9014-4f97-84d5-566c463eb454",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
