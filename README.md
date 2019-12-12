@@ -10,7 +10,7 @@ Preparation before using Postman collection:
 Steps to operate with the endpoints:
 1. Before using the collection, please add the Authorization for the collection, click "Edit Collection", go to "Authorization" tab, make sure to use "OAuth 2.0" to get a 3 legged token, and use it in the "Request Headers".
 
-![3LeggedSetup]](.\3leggedToken.png)
+![3leggedToken](3leggedToken.png)
 
 
 2. Follow step 1 to step 5 to create a budget which assigned to a contract, also create a cost item that will be attached to change orders in the following step.
