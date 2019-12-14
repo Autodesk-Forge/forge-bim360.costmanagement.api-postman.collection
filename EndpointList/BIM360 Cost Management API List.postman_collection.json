@@ -1,0 +1,2025 @@
+{
+	"info": {
+		"_postman_id": "65c54e71-4761-4f3c-b654-a9d2a93d6c70",
+		"name": "BIM360 Cost Management API List",
+		"description": "The collection together with the environment shows the whole list of the Endpoints which is released at 2020-01-17 as public beta.\n\nYou can refer to the https://forge.autodesk.com/en/docs/bim360/v1/overview/basics/ for the details about all these APIs.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Setup cost container id",
+			"item": [
+				{
+					"name": "GET all hubs of your account",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0400edee-9407-4539-a629-7f92f73ce24e",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var responseBody = JSON.parse(responseBody);",
+									"for ( var index in responseBody.data) {",
+									"    console.log( index );",
+									"    if(responseBody.data[index].id.indexOf(\"b.\") != -1){",
+									"        postman.setEnvironmentVariable(\"hub_id\", responseBody.data[index].id);",
+									"    }",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_domain}}/project/v1/hubs",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"project",
+								"v1",
+								"hubs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET projects from a hub",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "511e384b-691e-40a2-9fe5-716e82dd7274",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// find the specified project and setup the environment variable \"project_id\"",
+									"var project_name =  pm.environment.get(\"project_name\");",
+									"var responseBody = JSON.parse(responseBody);",
+									"for ( var index in responseBody.data) {",
+									"    if(responseBody.data[index].attributes.name == project_name){",
+									"        postman.setEnvironmentVariable(\"project_id\", responseBody.data[index].id);",
+									"    }",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "d0cd5145-8f97-47aa-a136-0c42d2309e11",
+								"exec": [
+									"pm.environment.set(\"project_name\", \"Sample Project used to test by Zhong\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_domain}}/project/v1/hubs/{{hub_id}}/projects",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"project",
+								"v1",
+								"hubs",
+								"{{hub_id}}",
+								"projects"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET project & setup cost container Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "25d5a645-4c36-4dd6-82a9-3c26136f9985",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var responseBody = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"cost_container_id\", responseBody.data.relationships.cost.data.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_domain}}/project/v1/hubs/{{hub_id}}/projects/{{project_id}}",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"project",
+								"v1",
+								"hubs",
+								"{{hub_id}}",
+								"projects",
+								"{{project_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "70d36364-ec62-4920-9414-a295572f4209",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "c97b5588-a555-4202-944f-74e9c2885266",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Budgets",
+			"item": [
+				{
+					"name": "GET Budgets |Good",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ca31f576-be8a-4184-aa61-c0a1c63ca056",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var data = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"budget_id\", data.id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/budgets?",
+							"host": [
+								"{{base_domain}}cost"
+							],
+							"path": [
+								"v1",
+								"containers",
+								"{{cost_container_id}}",
+								"budgets"
+							],
+							"query": [
+								{
+									"key": "include",
+									"value": "attributes,subitems",
+									"disabled": true
+								},
+								{
+									"key": "filter[rootId]",
+									"value": "c0ee92b0-e320-11e9-9ee1-4d815e0b7232",
+									"disabled": true
+								},
+								{
+									"key": "filter[id]",
+									"value": "c0ee92b0-e320-11e9-9ee1-4d815e0b7232",
+									"disabled": true
+								},
+								{
+									"key": "filter[code]",
+									"value": "001",
+									"disabled": true
+								},
+								{
+									"key": "order",
+									"value": "id",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET a Budget | Issue",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "750c4dfb-c950-4f16-99a0-c8bc8cb53064",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/budgets/{{budget_id}}?include=subitems,attributes",
+							"host": [
+								"{{base_domain}}cost"
+							],
+							"path": [
+								"v1",
+								"containers",
+								"{{cost_container_id}}",
+								"budgets",
+								"{{budget_id}}"
+							],
+							"query": [
+								{
+									"key": "include",
+									"value": "subitems,attributes"
+								},
+								{
+									"key": "filter[rootId]",
+									"value": "c0ee92b0-e320-11e9-9ee1-4d815e0b7232",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST a Budget | Good",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "46ec695e-7cdf-42c4-b69d-678f48fc65c7",
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"var data = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"budget_id\", data.id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"parentId\": null,\n        \"code\": \"200420420348\",\n        \"name\": \"My 1st budget\",\n        \"description\": \"1st budget\",\n        \"quantity\": 1,\n        \"unitPrice\": \"1000\",\n        \"unit\": \"LS\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/budgets",
+							"host": [
+								"{{base_domain}}cost"
+							],
+							"path": [
+								"v1",
+								"containers",
+								"{{cost_container_id}}",
+								"budgets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE a Budget | Good",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/budgets/{{budget_id}}",
+							"host": [
+								"{{base_domain}}cost"
+							],
+							"path": [
+								"v1",
+								"containers",
+								"{{cost_container_id}}",
+								"budgets",
+								"{{budget_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PATCH a Budget | Good",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"code\": \"200420420845\",\n        \"name\": \"Contingency\",\n        \"description\": \"Reserved for contingency\",\n        \"quantity\": 50,\n        \"unitPrice\": \"1000.0000\",\n        \"unit\": \"LS\",\n        \"actualCost\": \"1000.0000\",\n        \"adjustments\": {\n          \"details\": [\n            {\n              \"quantity\": 2,\n              \"unitPrice\": 2,\n              \"unit\": \"MNTH\"\n            }\n          ]\n        }\n      }"
+						},
+						"url": {
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/budgets/{{budget_id}}",
+							"host": [
+								"{{base_domain}}cost"
+							],
+							"path": [
+								"v1",
+								"containers",
+								"{{cost_container_id}}",
+								"budgets",
+								"{{budget_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST import Budgets | Good",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e3f15d13-d21d-4cc4-b166-1ab8be3e07f1",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"budget_id\", data[0].id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"data\": [\n          {\n            \"parentId\": null,\n            \"code\": \"200420420833\",\n            \"name\": \"My 1st budget from import\",\n            \"quantity\": 10,\n            \"unitPrice\": 1000.0000,\n            \"unit\": \"m3\"\n          },\n          \n          {\n            \"parentId\": null,\n            \"code\": \"200420420843\",\n            \"name\": \"My 2nd budget from import\",\n            \"quantity\": 20,\n            \"unitPrice\": 2000.0000,\n            \"unit\": \"m3\"\n          }          \n    ],\n    \"append\": false\n}",
+							"options": {
+								"raw": {
+									"language": "text"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/budgets:import",
+							"host": [
+								"{{base_domain}}cost"
+							],
+							"path": [
+								"v1",
+								"containers",
+								"{{cost_container_id}}",
+								"budgets:import"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "0fca396e-b28b-4c88-bf29-4321b8341e66",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "615c270f-22ba-4381-9314-ffeb7a45d1ed",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Contracts",
+			"item": [
+				{
+					"name": "GET Contracts | Good",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "cfca5644-3012-4e47-af4d-9e20bf186a36",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var data = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"contract_id\", data.results[0].id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/contracts",
+							"host": [
+								"{{base_domain}}cost"
+							],
+							"path": [
+								"v1",
+								"containers",
+								"{{cost_container_id}}",
+								"contracts"
+							],
+							"query": [
+								{
+									"key": "include",
+									"value": "attributes,budgets",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET a Contract |Good",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "cfca5644-3012-4e47-af4d-9e20bf186a36",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/contracts/{{contract_id}}",
+							"host": [
+								"{{base_domain}}cost"
+							],
+							"path": [
+								"v1",
+								"containers",
+								"{{cost_container_id}}",
+								"contracts",
+								"{{contract_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST a Contract | Good",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "cfca5644-3012-4e47-af4d-9e20bf186a36",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var data = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"contract_id\", data.id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "\n{\n        \"code\": \"Contract-1\",\n        \"name\": \"My 1st Contract\",\n        \"description\": \"1st contract\",\n        \"type\": \"consultant\",\n        \"budgets\": [\n        \t{ \n        \t\t\"id\": \"{{budget_id}}\"\n        \t}\n        ]\n}"
+						},
+						"url": {
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/contracts",
+							"host": [
+								"{{base_domain}}cost"
+							],
+							"path": [
+								"v1",
+								"containers",
+								"{{cost_container_id}}",
+								"contracts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PATCH Update a contract | Good",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "cfca5644-3012-4e47-af4d-9e20bf186a36",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "7e275243-a3b5-4484-862d-d6be21bd0d00",
+								"exec": [
+									"pm.environment.set(\"company_id\", \"57214049\");",
+									"pm.environment.set(\"user_id\", \"200902260532621\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"name\": \"Contract is updated\",\n        \"description\": \"contract is updated\",\n        \"companyId\": \"{{company_id}}\",\n        \"contactId\": \"{{user_id}}\",\n        \"budgets\": null,\n        \"type\": \"Subcontract\"\n}"
+						},
+						"url": {
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/contracts/{{contract_id}}",
+							"host": [
+								"{{base_domain}}cost"
+							],
+							"path": [
+								"v1",
+								"containers",
+								"{{cost_container_id}}",
+								"contracts",
+								"{{contract_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE a Contract | Good",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "cfca5644-3012-4e47-af4d-9e20bf186a36",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/contracts/{{contract_id}}",
+							"host": [
+								"{{base_domain}}cost"
+							],
+							"path": [
+								"v1",
+								"containers",
+								"{{cost_container_id}}",
+								"contracts",
+								"{{contract_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Change Order and Cost Item",
+			"item": [
+				{
+					"name": "GET change-orders",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7d16a9a4-c870-4cb6-9a45-f2c83c9916fd",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"changeOrder_type\", data[0].type);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/change-orders",
+							"host": [
+								"{{base_domain}}cost"
+							],
+							"path": [
+								"v1",
+								"containers",
+								"{{cost_container_id}}",
+								"change-orders"
+							]
+						},
+						"description": "Get change order types."
+					},
+					"response": []
+				},
+				{
+					"name": "GET change-orders/:changeOrder",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8d6d7bb5-1d9d-444c-bb67-a61ad8228445",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"changeOrder_id\", data.results[0].id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/change-orders/{{changeOrder_type}}?",
+							"host": [
+								"{{base_domain}}cost"
+							],
+							"path": [
+								"v1",
+								"containers",
+								"{{cost_container_id}}",
+								"change-orders",
+								"{{changeOrder_type}}"
+							],
+							"query": [
+								{
+									"key": "include",
+									"value": "CostItem",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get change-orders/:changeOrder/:id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/change-orders/{{changeOrder_type}}/{{changeOrder_id}}",
+							"host": [
+								"{{base_domain}}cost"
+							],
+							"path": [
+								"v1",
+								"containers",
+								"{{cost_container_id}}",
+								"change-orders",
+								"{{changeOrder_type}}",
+								"{{changeOrder_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PATCH change-orders/:changeOrder/:id",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "e15aa082-d4a9-4766-bb4b-a1e4a12a172c",
+								"exec": [
+									"pm.environment.set(\"recipient_id\", \"CED9SFEVTLHNXV\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"description\":\"update description\",\n\t\"name\":\"change order is updated\",\n\t\"recipients\": [\n    \t{\n            \"id\": \"{{recipient_id}}\",\n            \"isDefault\": false\n    \t}\n    ],\n    \"scopeOfWork\": \"updated scope of work\",\n    \"note\": \"updated note\"\n}"
+						},
+						"url": {
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/change-orders/{{changeOrder_type}}/{{changeOrder_id}}",
+							"host": [
+								"{{base_domain}}cost"
+							],
+							"path": [
+								"v1",
+								"containers",
+								"{{cost_container_id}}",
+								"change-orders",
+								"{{changeOrder_type}}",
+								"{{changeOrder_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST change-orders/:changeOrder",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"changeOrder_id\", data.id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"My 1st change order\",\n    \"description\": \"1st change order\",\n    \"scopeOfWork\": \"add scope of work\",\n    \"note\": \"add note\"\n}"
+						},
+						"url": {
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/change-orders/{{changeOrder_type}}",
+							"host": [
+								"{{base_domain}}cost"
+							],
+							"path": [
+								"v1",
+								"containers",
+								"{{cost_container_id}}",
+								"change-orders",
+								"{{changeOrder_type}}"
+							]
+						},
+						"description": "Create a new change order (typically a PCO) to initiate a change."
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE change-orders/:changeOrder/:id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/change-orders/{{changeOrder_type}}/{{changeOrder_id}}",
+							"host": [
+								"{{base_domain}}cost"
+							],
+							"path": [
+								"v1",
+								"containers",
+								"{{cost_container_id}}",
+								"change-orders",
+								"{{changeOrder_type}}",
+								"{{changeOrder_id}}"
+							]
+						},
+						"description": "Delete an existing change order"
+					},
+					"response": []
+				},
+				{
+					"name": "GET cost-items",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"costItem_id\", data.results[0].id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/cost-items?",
+							"host": [
+								"{{base_domain}}cost"
+							],
+							"path": [
+								"v1",
+								"containers",
+								"{{cost_container_id}}",
+								"cost-items"
+							],
+							"query": [
+								{
+									"key": "include",
+									"value": "changOrders",
+									"disabled": true
+								}
+							]
+						},
+						"description": "List all the cost items in a specified project."
+					},
+					"response": []
+				},
+				{
+					"name": "GET cost-items/:costItemId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/cost-items/{{costItem_id}}?include=changOrders",
+							"host": [
+								"{{base_domain}}cost"
+							],
+							"path": [
+								"v1",
+								"containers",
+								"{{cost_container_id}}",
+								"cost-items",
+								"{{costItem_id}}"
+							],
+							"query": [
+								{
+									"key": "include",
+									"value": "changOrders"
+								}
+							]
+						},
+						"description": "Get a cost item specified by ID. The returned item includes details."
+					},
+					"response": []
+				},
+				{
+					"name": "PATCH cost-items/:costItemId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"name\": \"Renamed\",\n        \"description\": \"Reviafafr ASI001\",\n        \"estimated\": \"9000.0000\",\n        \"proposed\": \"9000.0000\",\n        \"submitted\": \"9000.0000\",\n        \"approved\": \"9000.0000\",\n        \"committed\": \"9000.0000\"\n\t\n}"
+						},
+						"url": {
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/cost-items/{{costItem_id}}",
+							"host": [
+								"{{base_domain}}cost"
+							],
+							"path": [
+								"v1",
+								"containers",
+								"{{cost_container_id}}",
+								"cost-items",
+								"{{costItem_id}}"
+							]
+						},
+						"description": "Update an existing cost item"
+					},
+					"response": []
+				},
+				{
+					"name": "POST cost-items",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"costItem_id\", data.id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"name\": \"My 1st cost item\",\n        \"description\": \"1st cost item\",\n        \"estimated\": \"1000.0000\",\n        \"proposed\": \"1000.0000\",\n        \"submitted\": \"1000.0000\",\n        \"approved\": \"1000.0000\",\n        \"committed\": \"1000.0000\"\n}"
+						},
+						"url": {
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/cost-items",
+							"host": [
+								"{{base_domain}}cost"
+							],
+							"path": [
+								"v1",
+								"containers",
+								"{{cost_container_id}}",
+								"cost-items"
+							]
+						},
+						"description": "Create a new cost item in a specific container."
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE cost-items/:costItemId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/cost-items/{{costItem_id}}",
+							"host": [
+								"{{base_domain}}cost"
+							],
+							"path": [
+								"v1",
+								"containers",
+								"{{cost_container_id}}",
+								"cost-items",
+								"{{costItem_id}}"
+							]
+						},
+						"description": "Delete an existing cost item."
+					},
+					"response": []
+				},
+				{
+					"name": "POST cost-items:attach",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n    {\n          \"changeOrderId\": \"{{changeOrder_id}}\",\n          \"costItemId\": \"{{costItem_id}}\"\n    }\n]"
+						},
+						"url": {
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/cost-items:attach",
+							"host": [
+								"{{base_domain}}cost"
+							],
+							"path": [
+								"v1",
+								"containers",
+								"{{cost_container_id}}",
+								"cost-items:attach"
+							]
+						},
+						"description": "Add existing cost items to a change order."
+					},
+					"response": []
+				},
+				{
+					"name": "POST cost-items:detach",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n\t{\n          \"changeOrderId\": \"{{changeOrder_id}}\",\n          \"costItemId\": \"{{costItem_id}}\"\n\t}\n]"
+						},
+						"url": {
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/cost-items:detach",
+							"host": [
+								"{{base_domain}}cost"
+							],
+							"path": [
+								"v1",
+								"containers",
+								"{{cost_container_id}}",
+								"cost-items:detach"
+							]
+						},
+						"description": "Remove existing cost items from a change order."
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Attachment",
+			"item": [
+				{
+					"name": "POST attachment-folders",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"folder_id\", data.id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "7e0ba9a7-d18e-40e9-98e8-4af40c90e575",
+								"exec": [
+									"pm.environment.set(\"association_type\", \"Contract\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"associationId\": \"{{contract_id}}\",\n        \"associationType\": \"{{association_type}}\"\n}"
+						},
+						"url": {
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/attachment-folders",
+							"host": [
+								"{{base_domain}}cost"
+							],
+							"path": [
+								"v1",
+								"containers",
+								"{{cost_container_id}}",
+								"attachment-folders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST an attachment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"attachment_id\", data.id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "66e88806-7c0c-4c87-83d4-b64999c51042",
+								"exec": [
+									"pm.environment.set(\"attachment_urn\", \"urn:adsk.wipprod:fs.file:vf.zvk69QogTzeTjyHS1V61tg?version=1\");",
+									"pm.environment.set(\"association_type\", \"Contract\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"name\": \"My 1st attachment\",\n        \"folderId\": \"{{folder_id}}\",\n        \"urn\": \"{{attachment_urn}}\",\n        \"associationId\": \"{{contract_id}}\",\n        \"associationType\": \"{{association_type}}\"\n}"
+						},
+						"url": {
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/attachments",
+							"host": [
+								"{{base_domain}}cost"
+							],
+							"path": [
+								"v1",
+								"containers",
+								"{{cost_container_id}}",
+								"attachments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET attachments | Good",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"attachment_id\", data[0].id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/attachments?associationId={{contract_id}}&associationType={{association_type}}",
+							"host": [
+								"{{base_domain}}cost"
+							],
+							"path": [
+								"v1",
+								"containers",
+								"{{cost_container_id}}",
+								"attachments"
+							],
+							"query": [
+								{
+									"key": "associationId",
+									"value": "{{contract_id}}"
+								},
+								{
+									"key": "associationType",
+									"value": "{{association_type}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE attachment | Good",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
+								"exec": [
+									"pm.environment.unset(\"attachment_id\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/attachments/{{attachment_id}}",
+							"host": [
+								"{{base_domain}}cost"
+							],
+							"path": [
+								"v1",
+								"containers",
+								"{{cost_container_id}}",
+								"attachments",
+								"{{attachment_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Custom Attribute",
+			"item": [
+				{
+					"name": "GET Properties | Good",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"property_definition_id\", data[0].id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "1efb7b78-9a9f-4e74-9465-8deeaabdcfa2",
+								"exec": [
+									"pm.environment.set(\"custom_attribute_type\", \"Budget\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/properties?filter[category]={{custom_attribute_type}}",
+							"host": [
+								"{{base_domain}}cost"
+							],
+							"path": [
+								"v1",
+								"containers",
+								"{{cost_container_id}}",
+								"properties"
+							],
+							"query": [
+								{
+									"key": "filter[category]",
+									"value": "{{custom_attribute_type}}"
+								},
+								{
+									"key": "filter[name]",
+									"value": "Type",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Multiple Property Values",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n        {\n          \"associationType\":\"{{custom_attribute_type}}\",\n          \"associationId\":\"{{budget_id}}\",\n          \"propertyDefinitionId\": \"{{property_definition_id}}\",\n          \"value\": \"A\"\n        }\n]"
+						},
+						"url": {
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/property-values:batch-update",
+							"host": [
+								"{{base_domain}}cost"
+							],
+							"path": [
+								"v1",
+								"containers",
+								"{{cost_container_id}}",
+								"property-values:batch-update"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Change Order Document",
+			"item": [
+				{
+					"name": "GET Documents",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"document_id\", data[0].id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "94535971-fb94-4a0e-baa4-705b8a212949",
+								"exec": [
+									"pm.environment.set(\"association_type\", \"FormInstance\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/documents?associationId={{changeOrder_id}}&associationType={{association_type}}",
+							"host": [
+								"{{base_domain}}cost"
+							],
+							"path": [
+								"v1",
+								"containers",
+								"{{cost_container_id}}",
+								"documents"
+							],
+							"query": [
+								{
+									"key": "associationId",
+									"value": "{{changeOrder_id}}"
+								},
+								{
+									"key": "associationType",
+									"value": "{{association_type}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PATCH a document",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"documentId\", data.id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"signedUrn\": \"{{attachment_urn}}\",\n        \"status\": \"Signed\"\n}"
+						},
+						"url": {
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/documents/{{document_id}}",
+							"host": [
+								"{{base_domain}}cost"
+							],
+							"path": [
+								"v1",
+								"containers",
+								"{{cost_container_id}}",
+								"documents",
+								"{{document_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Contract File Package",
+			"item": [
+				{
+					"name": "GET File Packages",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"file_package_id\", data[0].id);",
+									"postman.setEnvironmentVariable(\"file_package_item_id\", data[0].items[0].id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "07909169-e5cf-4c30-bc4f-4515f674039e",
+								"exec": [
+									"pm.environment.set(\"association_type\", \"Contract\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/file-packages?filter[associationType]={{association_type}}&filter[associationId]={{contract_id}}",
+							"host": [
+								"{{base_domain}}cost"
+							],
+							"path": [
+								"v1",
+								"containers",
+								"{{cost_container_id}}",
+								"file-packages"
+							],
+							"query": [
+								{
+									"key": "filter[associationType]",
+									"value": "{{association_type}}"
+								},
+								{
+									"key": "filter[associationId]",
+									"value": "{{contract_id}}"
+								},
+								{
+									"key": "filter[id]",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PATCH File Package",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"signedUrn\": \"{{attachment_urn}}\"\n}"
+						},
+						"url": {
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/file-packages/{{file_package_id}}/items/{{file_package_item_id}}",
+							"host": [
+								"{{base_domain}}cost"
+							],
+							"path": [
+								"v1",
+								"containers",
+								"{{cost_container_id}}",
+								"file-packages",
+								"{{file_package_id}}",
+								"items",
+								"{{file_package_item_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Actions",
+			"item": [
+				{
+					"name": "GET Actions | Issues",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/workflows/FormInstance/{{changeOrder_Id}}/actions?",
+							"host": [
+								"{{base_domain}}cost"
+							],
+							"path": [
+								"v1",
+								"containers",
+								"{{cost_container_id}}",
+								"workflows",
+								"FormInstance",
+								"{{changeOrder_Id}}",
+								"actions"
+							],
+							"query": [
+								{
+									"key": "filter[actionType]",
+									"value": "workflow,system,generateChangeOrder",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Actions",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n    {\n      \"action\": \"budgetSubmit\",\n      \"associationId\": \"{{changeOrder_Id}}\",\n      \"associationType\": \"FormInstance\",\n      \"options\": {}\n    }\n]"
+						},
+						"url": {
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/workflows/actions",
+							"host": [
+								"{{base_domain}}cost"
+							],
+							"path": [
+								"v1",
+								"containers",
+								"{{cost_container_id}}",
+								"workflows",
+								"actions"
+							],
+							"query": [
+								{
+									"key": "filter[name]",
+									"value": "Type",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"auth": {
+		"type": "oauth2",
+		"oauth2": [
+			{
+				"key": "accessToken",
+				"value": "eyJhbGciOiJIUzI1NiIsImtpZCI6Imp3dF9zeW1tZXRyaWNfa2V5In0.eyJ1c2VyaWQiOiI0VjRXS1FKR0dRN04iLCJleHAiOjE1NzYyMjk1MTYsInNjb3BlIjpbImRhdGE6cmVhZCIsImRhdGE6d3JpdGUiXSwiY2xpZW50X2lkIjoia0p0YkxZS2dHUjlOazh4MFZxbHJjMlkwM0lINXU5bFAiLCJncmFudF9pZCI6IjE1QjB4eGpSNUl3NXB6QXFQdjd0NkhzeGZiZGJVT3loIiwiYXVkIjoiaHR0cHM6Ly9hdXRvZGVzay5jb20vYXVkL2p3dGV4cDYwIiwianRpIjoiRVc1eUhEempGUUMxZHRrRXBqWlVkVld5enVXY21hTVB2emp2MUJyRHhKcHhuRHJIUUtPdUdrRExnZEVuOUV0TCJ9.g0-vS-jQhpv2VF49X8DY0L6UJV6zsWTU5K0X2IF6BEI",
+				"type": "string"
+			},
+			{
+				"key": "tokenType",
+				"value": "Bearer",
+				"type": "string"
+			},
+			{
+				"key": "addTokenTo",
+				"value": "header",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "6461e641-e785-4fdb-9a0a-3657670dfef1",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "3d21282b-9014-4f97-84d5-566c463eb454",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
