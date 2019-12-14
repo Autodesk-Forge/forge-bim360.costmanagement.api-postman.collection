@@ -4,8 +4,8 @@ This repository contains several tutorials that teach you how to use Forge APIs.
 
 Currently, this repository contains tutorials for the following:
 
-- [BIM360 Cost Management Tutorial](Cost tutorial)
-- [BIM360 Cost Management API List](All Endpoints)
+- [BIM360 Cost Management Tutorial](CostTutorial)
+- [BIM360 Cost Management API List](EndpointList)
 
 
 ## What's Postman?
