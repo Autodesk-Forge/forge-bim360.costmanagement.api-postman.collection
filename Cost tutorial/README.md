@@ -11,6 +11,7 @@
 [![License](https://img.shields.io/:license-MIT-blue.svg)](http://opensource.org/licenses/MIT)
 
 This folder contains a Postman Collection that contains the requests cover the current main workflow of BIM360 Cost Management. The collection together with the environment shows you how to create a new budget with contract, create a cost item, and create different change orders then attach to the cost item, you can also use the available "Action" applied on the change order to change the status of the change order.
+![Collection](Img/collection.png)
 
 
 ## Instructions to run the Postman tutorial are as below:
@@ -32,7 +33,6 @@ This folder contains a Postman Collection that contains the requests cover the c
     - Access Token URL: https://developer.api.autodesk.com/authentication/v1/gettoken
 
 ### Tutorials of BIM360 Cost Management workflow
-![Collection](Img/collection.png)
 1. Step 1: List all the Hubs, and save **hub_id** for the 1st BIM360 Hub (Data Management API)
 2. Step 2: List all the projects in the BIM360 Hub, and save **project_id** for the specified project(Data Management API).
 3. Step 3: Get the information of the specified BIM360 project, and save **cost_container_id** for the Cost Container(Data Management API).
