@@ -1,44 +1,21 @@
-# BIM360 Cost Management Step-by-Step Tutorial
+# BIM360 Cost Management API Documentation Postman Collection Git Repo
 
-![Platforms](https://img.shields.io/badge/Web-Windows|MacOS-lightgray.svg)
-[![oAuth2](https://img.shields.io/badge/Authentication-v1-green.svg)](http://developer.autodesk.com/)
-[![Data-Management](https://img.shields.io/badge/Data%20Management-v2-green.svg)](http://developer.autodesk.com/)
-[![BIM360-CostManagement](https://img.shields.io/badge/BIM360%20Cost%20Management-v1-green.svg)](http://developer.autodesk.com/)
+This repository contains several tutorials that teach you how to use Forge APIs. The Forge Portal also contains Step-by-Step tutorials for the same purpose. The tutorials on Forge use [cURL](https://curl.haxx.se/) to send HTTP requests to Forge, while the tutorials in this repository use [Postman](https://www.getpostman.com/). The tutorials on the Forge portal and this repository demonstrate the same workflows. They differ only by the tool used to send HTTP requests.
 
-[![Postman](https://img.shields.io/badge/Postman-v7-orange.svg)](https://www.getpostman.com/)
+Currently, this repository contains tutorials for the following:
 
-![Beginner](https://img.shields.io/badge/Level-Beginner-green.svg)
-[![License](https://img.shields.io/:license-MIT-blue.svg)](http://opensource.org/licenses/MIT)
-
-This folder contains a Postman Collection that contains the requests cover the current main workflow of BIM360 Cost Management. The collection together with the environment shows you how to create a new budget with contract, create a cost item, and create different change orders then attach to the cost item, you can also use the available "Action" applied on the change order to change the status of the change order.
+- [BIM360 Cost Management Tutorial](Cost tutorial)
+- [BIM360 Cost Management API List](All Endpoints)
 
 
-## Instructions to run the Postman tutorial are as below:
+## What's Postman?
 
-### Preparation before you begin:
-- [Create Forge App, get access to a BIM 360 Account](https://forge.autodesk.com/en/docs/bim360/v1/tutorials/getting-started/get-access-to-account/)
-- [Create BIM360 project, activate Cost Management module, setup project for Cost Management](https://help.autodesk.com/view/BIM360D/ENU/?guid=BIM360D_Cost_Management_getting_started_with_cost_management_html);
+Postman is a popular tool that provides an easy-to-use interface to send HTTP requests. Postman is able to parse the responses that Forge sends you and save response parameter values to variables. These parameters can then be reused in subsequent requests through these variables. The Postman collections in this repository use this ability to provide pre-populated HTTP requests to help you follow the tutorial workflow with minimal effort. You can also modify the requests and experiment without having to write a single line of code. 
 
-### Setup Postman environment and Authorization:
-- Import Postman environment & collection, please setup the following environment vialables, 
-    - client_id:     Forge App Id.
-    - client_secret: Forge App Secrect. 
-    - project_name:  The project name that you want to operate on.
+- You can learn how to install and use Postman from [here](https://learning.getpostman.com/docs/postman/launching_postman/installation_and_updates).
 
-- Please add the Authorization for the collection, click "Edit Collection", go to "Authorization" tab, make sure to use "OAuth 2.0" to get a 3 legged token, use it in the "Request Headers".
-![3leggedToken](./Img/3leggedToken.png)
-    - Callback URL: https://www.getpostman.com/oauth2/callback
-    - Auth URL: https://developer.api.autodesk.com/authentication/v1/authorize 
-    - Access Token URL: https://developer.api.autodesk.com/authentication/v1/gettoken
+- You can download the Postman installer from [here](https://www.getpostman.com/downloads/).
 
-### Tutorials of BIM360 Cost Management workflow
-![Collection](Img/collection.png)
+## What next?
 
-1. 
-
-
-Follow step 1 to step 5 to create a budget which assigned to a contract, also create a cost item that will be attached to change orders in the following step.
-
-4. Iterate to do step 6 ~ step 11 to get different change order types, and create the different orders then perform action on that based on your workflow.
-	- PCO -> RFQ -> SCO
-	- PCO -> RCO -> OCO -> SCO
+To follow a tutorial, click the corresponding link in the list of tutorials or navigate to the corresponding folder in this repository. The *readme.md* file in the folder provides instructions on how to follow that tutorial. 
