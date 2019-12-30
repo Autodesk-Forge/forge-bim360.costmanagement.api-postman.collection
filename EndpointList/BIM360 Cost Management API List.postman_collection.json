@@ -26,7 +26,8 @@
 									"    console.log( index );",
 									"    if(responseBody.data[index].id.indexOf(\"b.\") != -1){",
 									"        postman.setEnvironmentVariable(\"hub_id\", responseBody.data[index].id);",
-									"    }",
+									"        postman.setEnvironmentVariable(\"account_id\", responseBody.data[index].id.split(\"b.\").join(\"\"));",
+									"}",
 									"}",
 									""
 								],
@@ -81,7 +82,6 @@
 							"script": {
 								"id": "d0cd5145-8f97-47aa-a136-0c42d2309e11",
 								"exec": [
-									"pm.environment.set(\"project_name\", \"Sample Project used to test by Zhong\");",
 									""
 								],
 								"type": "text/javascript"
@@ -175,7 +175,7 @@
 			"name": "Budgets",
 			"item": [
 				{
-					"name": "GET Budgets |Good",
+					"name": "GET budgets",
 					"event": [
 						{
 							"listen": "test",
@@ -242,12 +242,13 @@
 									"disabled": true
 								}
 							]
-						}
+						},
+						"description": "Returns all the budgets in a project."
 					},
 					"response": []
 				},
 				{
-					"name": "GET a Budget | Issue",
+					"name": "GET\tbudgets/:budgetId",
 					"event": [
 						{
 							"listen": "test",
@@ -295,12 +296,46 @@
 									"disabled": true
 								}
 							]
-						}
+						},
+						"description": "Get a budget specified by ID."
 					},
 					"response": []
 				},
 				{
-					"name": "POST a Budget | Good",
+					"name": "PATCH\tbudgets/:budgetId",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"code\": \"200420420845\",\n        \"name\": \"My updated budget\",\n        \"description\": \"budget description\",\n        \"quantity\": 50,\n        \"unitPrice\": \"1000.0000\",\n        \"unit\": \"LS\",\n        \"actualCost\": \"1000.0000\",\n        \"adjustments\": {\n          \"details\": [\n            {\n              \"quantity\": 2,\n              \"unitPrice\": 2,\n              \"unit\": \"MNTH\"\n            }\n          ]\n        }\n      }"
+						},
+						"url": {
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/budgets/{{budget_id}}",
+							"host": [
+								"{{base_domain}}cost"
+							],
+							"path": [
+								"v1",
+								"containers",
+								"{{cost_container_id}}",
+								"budgets",
+								"{{budget_id}}"
+							]
+						},
+						"description": "Update a budget."
+					},
+					"response": []
+				},
+				{
+					"name": "POST budgets",
 					"event": [
 						{
 							"listen": "test",
@@ -325,13 +360,13 @@
 							{
 								"key": "Content-Type",
 								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
+								"type": "text",
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"parentId\": null,\n        \"code\": \"200420420348\",\n        \"name\": \"My 1st budget\",\n        \"description\": \"1st budget\",\n        \"quantity\": 1,\n        \"unitPrice\": \"1000\",\n        \"unit\": \"LS\"\n}",
+							"raw": "{\n        \"parentId\": null,\n        \"code\": \"200420420348\",\n        \"name\": \"My budget name\",\n        \"description\": \"budget description\",\n        \"quantity\": 1,\n        \"unitPrice\": \"1000\",\n        \"unit\": \"LS\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -349,12 +384,13 @@
 								"{{cost_container_id}}",
 								"budgets"
 							]
-						}
+						},
+						"description": "Create a budget in a given project."
 					},
 					"response": []
 				},
 				{
-					"name": "DELETE a Budget | Good",
+					"name": "DELETE\tbudgets/:budgetId",
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -374,44 +410,13 @@
 								"budgets",
 								"{{budget_id}}"
 							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "PATCH a Budget | Good",
-					"request": {
-						"method": "PATCH",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n        \"code\": \"200420420845\",\n        \"name\": \"Contingency\",\n        \"description\": \"Reserved for contingency\",\n        \"quantity\": 50,\n        \"unitPrice\": \"1000.0000\",\n        \"unit\": \"LS\",\n        \"actualCost\": \"1000.0000\",\n        \"adjustments\": {\n          \"details\": [\n            {\n              \"quantity\": 2,\n              \"unitPrice\": 2,\n              \"unit\": \"MNTH\"\n            }\n          ]\n        }\n      }"
 						},
-						"url": {
-							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/budgets/{{budget_id}}",
-							"host": [
-								"{{base_domain}}cost"
-							],
-							"path": [
-								"v1",
-								"containers",
-								"{{cost_container_id}}",
-								"budgets",
-								"{{budget_id}}"
-							]
-						}
+						"description": "Delete a budget."
 					},
 					"response": []
 				},
 				{
-					"name": "POST import Budgets | Good",
+					"name": "POST budgets:import",
 					"event": [
 						{
 							"listen": "test",
@@ -432,13 +437,13 @@
 							{
 								"key": "Content-Type",
 								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
+								"type": "text",
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"data\": [\n          {\n            \"parentId\": null,\n            \"code\": \"200420420833\",\n            \"name\": \"My 1st budget from import\",\n            \"quantity\": 10,\n            \"unitPrice\": 1000.0000,\n            \"unit\": \"m3\"\n          },\n          \n          {\n            \"parentId\": null,\n            \"code\": \"200420420843\",\n            \"name\": \"My 2nd budget from import\",\n            \"quantity\": 20,\n            \"unitPrice\": 2000.0000,\n            \"unit\": \"m3\"\n          }          \n    ],\n    \"append\": false\n}",
+							"raw": "{\n\t\"data\": [\n          {\n            \"parentId\": null,\n            \"code\": \"200420420833\",\n            \"name\": \"1st budget from import\",\n            \"quantity\": 10,\n            \"unitPrice\": 1000.0000,\n            \"unit\": \"m3\"\n          },\n          \n          {\n            \"parentId\": null,\n            \"code\": \"200420420843\",\n            \"name\": \"2nd budget from import\",\n            \"quantity\": 20,\n            \"unitPrice\": 2000.0000,\n            \"unit\": \"m3\"\n          }          \n    ],\n    \"append\": false\n}",
 							"options": {
 								"raw": {
 									"language": "text"
@@ -456,7 +461,8 @@
 								"{{cost_container_id}}",
 								"budgets:import"
 							]
-						}
+						},
+						"description": "Import a list of budgets into a project chunk by chunk. Maximum amount per chunk is 50."
 					},
 					"response": []
 				}
@@ -489,7 +495,7 @@
 			"name": "Contracts",
 			"item": [
 				{
-					"name": "GET Contracts | Good",
+					"name": "GET\tcontracts",
 					"event": [
 						{
 							"listen": "test",
@@ -536,12 +542,13 @@
 									"disabled": true
 								}
 							]
-						}
+						},
+						"description": "Returns all the contract in a project."
 					},
 					"response": []
 				},
 				{
-					"name": "GET a Contract |Good",
+					"name": "GET\tcontracts/:contractId",
 					"event": [
 						{
 							"listen": "test",
@@ -578,60 +585,13 @@
 								"contracts",
 								"{{contract_id}}"
 							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "POST a Contract | Good",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "cfca5644-3012-4e47-af4d-9e20bf186a36",
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"var data = JSON.parse(responseBody);",
-									"postman.setEnvironmentVariable(\"contract_id\", data.id);",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "\n{\n        \"code\": \"Contract-1\",\n        \"name\": \"My 1st Contract\",\n        \"description\": \"1st contract\",\n        \"type\": \"consultant\",\n        \"budgets\": [\n        \t{ \n        \t\t\"id\": \"{{budget_id}}\"\n        \t}\n        ]\n}"
 						},
-						"url": {
-							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/contracts",
-							"host": [
-								"{{base_domain}}cost"
-							],
-							"path": [
-								"v1",
-								"containers",
-								"{{cost_container_id}}",
-								"contracts"
-							]
-						}
+						"description": "Gets a contract specified by ID."
 					},
 					"response": []
 				},
 				{
-					"name": "PATCH Update a contract | Good",
+					"name": "PATCH contracts/:contractId",
 					"event": [
 						{
 							"listen": "test",
@@ -666,7 +626,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"name\": \"Contract is updated\",\n        \"description\": \"contract is updated\",\n        \"companyId\": \"{{company_id}}\",\n        \"contactId\": \"{{user_id}}\",\n        \"budgets\": null,\n        \"type\": \"Subcontract\"\n}"
+							"raw": "{\n        \"name\": \"Your updated contract\",\n        \"code\":\"GCC09\",\n\t\t\"id\":\"{{contract_id}}\",\n        \"description\": \"contract is updated\",\n        \"companyId\": \"{{company_id}}\",\n        \"contactId\": \"{{user_id}}\",\n        \"budgets\": [{\n        \t\"id\":\"{{budget_id}}\"\n        \t}\n        ],\n        \"type\": \"Subcontract\",\n        \"signedBy\":\"{{user_id}}\",\n        \"ownerId\": \"{{user_id}}\"\n        \n}\n\n\n"
 						},
 						"url": {
 							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/contracts/{{contract_id}}",
@@ -680,12 +640,62 @@
 								"contracts",
 								"{{contract_id}}"
 							]
-						}
+						},
+						"description": "Patch Update a contract"
 					},
 					"response": []
 				},
 				{
-					"name": "DELETE a Contract | Good",
+					"name": "POST contracts",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "cfca5644-3012-4e47-af4d-9e20bf186a36",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var data = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"contract_id\", data.id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "\n{\n        \"code\": \"Contract-1\",\n        \"name\": \"My 1st Contract\",\n        \"description\": \"Contract description\",\n        \"type\": \"consultant\",\n        \"budgets\": [\n        \t{ \n        \t\t\"id\": \"{{budget_id}}\"\n        \t}\n        ]\n}"
+						},
+						"url": {
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/contracts",
+							"host": [
+								"{{base_domain}}cost"
+							],
+							"path": [
+								"v1",
+								"containers",
+								"{{cost_container_id}}",
+								"contracts"
+							]
+						},
+						"description": "Create a contract in a specific container."
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE\tcontracts/:contractId",
 					"event": [
 						{
 							"listen": "test",
@@ -717,7 +727,8 @@
 								"contracts",
 								"{{contract_id}}"
 							]
-						}
+						},
+						"description": "Delete a contract item specified by ID."
 					},
 					"response": []
 				}
@@ -920,7 +931,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"name\": \"My 1st change order\",\n    \"description\": \"1st change order\",\n    \"scopeOfWork\": \"add scope of work\",\n    \"note\": \"add note\"\n}"
+							"raw": "{\n\t\"name\": \"My 1st change order\",\n    \"description\": \"change order description\",\n    \"scopeOfWork\": \"scope of work\",\n    \"note\": \"note\"\n}"
 						},
 						"url": {
 							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/change-orders/{{changeOrder_type}}",
@@ -1338,7 +1349,8 @@
 								"{{cost_container_id}}",
 								"attachment-folders"
 							]
-						}
+						},
+						"description": "Find or create an attachment folder in BIM 360 Docs for a given item. That folder will save local files as attachments to the item. Files are saved using the Storage service."
 					},
 					"response": []
 				},
@@ -1381,7 +1393,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"name\": \"My 1st attachment\",\n        \"folderId\": \"{{folder_id}}\",\n        \"urn\": \"{{attachment_urn}}\",\n        \"associationId\": \"{{contract_id}}\",\n        \"associationType\": \"{{association_type}}\"\n}"
+							"raw": "{\n        \"name\": \"My 1st attachment\",\n        \"folderId\": \"{{folder_id}}\",\n        \"urn\": \"{{attachment_urn}}\",\n        \"associationId\": \"{{association_id}}\",\n        \"associationType\": \"{{association_type}}\"\n}"
 						},
 						"url": {
 							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/attachments",
@@ -1394,12 +1406,13 @@
 								"{{cost_container_id}}",
 								"attachments"
 							]
-						}
+						},
+						"description": "Create an attachment in a specific container"
 					},
 					"response": []
 				},
 				{
-					"name": "GET attachments | Good",
+					"name": "GET attachments",
 					"event": [
 						{
 							"listen": "test",
@@ -1427,8 +1440,8 @@
 							{
 								"key": "Content-Type",
 								"name": "Content-Type",
-								"value": "application/json",
 								"type": "text",
+								"value": "application/json",
 								"disabled": true
 							}
 						],
@@ -1457,12 +1470,13 @@
 									"value": "{{association_type}}"
 								}
 							]
-						}
+						},
+						"description": "Get all the attachments associated with an item such as a budget, contract, or cost item."
 					},
 					"response": []
 				},
 				{
-					"name": "DELETE attachment | Good",
+					"name": "DELETE\tattachments/:attachmentId",
 					"event": [
 						{
 							"listen": "test",
@@ -1481,8 +1495,8 @@
 							{
 								"key": "Content-Type",
 								"name": "Content-Type",
-								"value": "application/json",
 								"type": "text",
+								"value": "application/json",
 								"disabled": true
 							}
 						],
@@ -1502,7 +1516,8 @@
 								"attachments",
 								"{{attachment_id}}"
 							]
-						}
+						},
+						"description": "Delete a Attachment"
 					},
 					"response": []
 				}
@@ -1513,7 +1528,7 @@
 			"name": "Custom Attribute",
 			"item": [
 				{
-					"name": "GET Properties | Good",
+					"name": "GET\tproperties",
 					"event": [
 						{
 							"listen": "test",
@@ -1532,7 +1547,7 @@
 							"script": {
 								"id": "1efb7b78-9a9f-4e74-9465-8deeaabdcfa2",
 								"exec": [
-									"pm.environment.set(\"custom_attribute_type\", \"Budget\");"
+									"pm.environment.set(\"association_type\", \"Budget\");"
 								],
 								"type": "text/javascript"
 							}
@@ -1549,7 +1564,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/properties?filter[category]={{custom_attribute_type}}",
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/properties?filter[category]={{association_type}}",
 							"host": [
 								"{{base_domain}}cost"
 							],
@@ -1562,7 +1577,7 @@
 							"query": [
 								{
 									"key": "filter[category]",
-									"value": "{{custom_attribute_type}}"
+									"value": "{{association_type}}"
 								},
 								{
 									"key": "filter[name]",
@@ -1570,12 +1585,13 @@
 									"disabled": true
 								}
 							]
-						}
+						},
+						"description": "List all the attribute definitions created to define custom attributes for a given module."
 					},
 					"response": []
 				},
 				{
-					"name": "POST Multiple Property Values",
+					"name": "POST property-values:batch-update",
 					"event": [
 						{
 							"listen": "test",
@@ -1598,13 +1614,13 @@
 							{
 								"key": "Content-Type",
 								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
+								"type": "text",
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "[\n        {\n          \"associationType\":\"{{custom_attribute_type}}\",\n          \"associationId\":\"{{budget_id}}\",\n          \"propertyDefinitionId\": \"{{property_definition_id}}\",\n          \"value\": \"A\"\n        }\n]"
+							"raw": "[\n        {\n          \"associationType\":\"{{association_type}}\",\n          \"associationId\":\"{{association_id}}\",\n          \"propertyDefinitionId\": \"{{property_definition_id}}\",\n          \"value\": \"A\"\n        }\n]"
 						},
 						"url": {
 							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/property-values:batch-update",
@@ -1617,7 +1633,8 @@
 								"{{cost_container_id}}",
 								"property-values:batch-update"
 							]
-						}
+						},
+						"description": "Update the existing values of multi custom attributes associated with an item such as a cost item, PCO, and so on."
 					},
 					"response": []
 				}
@@ -1625,10 +1642,10 @@
 			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "Change Order Document",
+			"name": "Generated Document",
 			"item": [
 				{
-					"name": "GET Documents",
+					"name": "GET\tdocuments",
 					"event": [
 						{
 							"listen": "test",
@@ -1664,7 +1681,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/documents?associationId={{changeOrder_id}}&associationType={{association_type}}",
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/documents?associationId={{association_id}}&associationType={{association_type}}",
 							"host": [
 								"{{base_domain}}cost"
 							],
@@ -1677,60 +1694,15 @@
 							"query": [
 								{
 									"key": "associationId",
-									"value": "{{changeOrder_id}}"
+									"value": "{{association_id}}"
 								},
 								{
 									"key": "associationType",
 									"value": "{{association_type}}"
 								}
 							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "PATCH a document",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
-								"exec": [
-									"var data = JSON.parse(responseBody);",
-									"postman.setEnvironmentVariable(\"documentId\", data.id);",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "PATCH",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n        \"signedUrn\": \"{{attachment_urn}}\",\n        \"status\": \"Signed\"\n}"
 						},
-						"url": {
-							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/documents/{{document_id}}",
-							"host": [
-								"{{base_domain}}cost"
-							],
-							"path": [
-								"v1",
-								"containers",
-								"{{cost_container_id}}",
-								"documents",
-								"{{document_id}}"
-							]
-						}
+						"description": "Get generated documents."
 					},
 					"response": []
 				}
@@ -1738,10 +1710,10 @@
 			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "Contract File Package",
+			"name": "Generated File Package",
 			"item": [
 				{
-					"name": "GET File Packages",
+					"name": "GET\tfile-packages",
 					"event": [
 						{
 							"listen": "test",
@@ -1778,7 +1750,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/file-packages?filter[associationType]={{association_type}}&filter[associationId]={{contract_id}}",
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/file-packages?filter[associationType]={{association_type}}&filter[associationId]={{association_id}}",
 							"host": [
 								"{{base_domain}}cost"
 							],
@@ -1795,7 +1767,7 @@
 								},
 								{
 									"key": "filter[associationId]",
-									"value": "{{contract_id}}"
+									"value": "{{association_id}}"
 								},
 								{
 									"key": "filter[id]",
@@ -1803,53 +1775,8 @@
 									"disabled": true
 								}
 							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "PATCH File Package",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "PATCH",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n        \"signedUrn\": \"{{attachment_urn}}\"\n}"
 						},
-						"url": {
-							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/file-packages/{{file_package_id}}/items/{{file_package_item_id}}",
-							"host": [
-								"{{base_domain}}cost"
-							],
-							"path": [
-								"v1",
-								"containers",
-								"{{cost_container_id}}",
-								"file-packages",
-								"{{file_package_id}}",
-								"items",
-								"{{file_package_item_id}}"
-							]
-						}
+						"description": "Returns all the file packages in a specific container."
 					},
 					"response": []
 				}
@@ -1860,13 +1787,18 @@
 			"name": "Actions",
 			"item": [
 				{
-					"name": "GET Actions | Issues",
+					"name": "GET\tactions",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
 								"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
 								"exec": [
+									"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+									"",
+									"// setup the environment variable \"action_name\"",
+									"var responseBody = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"action_name\", responseBody[0].name);",
 									""
 								],
 								"type": "text/javascript"
@@ -1896,7 +1828,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/workflows/FormInstance/{{changeOrder_Id}}/actions?",
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/workflows/{{association_type}}/{{association-id}}/actions?",
 							"host": [
 								"{{base_domain}}cost"
 							],
@@ -1905,8 +1837,8 @@
 								"containers",
 								"{{cost_container_id}}",
 								"workflows",
-								"FormInstance",
-								"{{changeOrder_Id}}",
+								"{{association_type}}",
+								"{{association-id}}",
 								"actions"
 							],
 							"query": [
@@ -1916,12 +1848,13 @@
 									"disabled": true
 								}
 							]
-						}
+						},
+						"description": "List the actions that can execute on the specified item according to the item’s current state."
 					},
 					"response": []
 				},
 				{
-					"name": "POST Actions",
+					"name": "POST actions",
 					"event": [
 						{
 							"listen": "test",
@@ -1944,13 +1877,13 @@
 							{
 								"key": "Content-Type",
 								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
+								"type": "text",
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "[\n    {\n      \"action\": \"budgetSubmit\",\n      \"associationId\": \"{{changeOrder_Id}}\",\n      \"associationType\": \"FormInstance\",\n      \"options\": {}\n    }\n]"
+							"raw": "[\n    {\n      \"action\": \"{{action_name}}\",\n      \"associationId\": \"{{association_id}}\",\n      \"associationType\": \"{{association_type}}\",\n      \"options\": {}\n    }\n]"
 						},
 						"url": {
 							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/workflows/actions",
@@ -1971,7 +1904,8 @@
 									"disabled": true
 								}
 							]
-						}
+						},
+						"description": "Perform a specified action on an item."
 					},
 					"response": []
 				}
@@ -1984,7 +1918,7 @@
 		"oauth2": [
 			{
 				"key": "accessToken",
-				"value": "eyJhbGciOiJIUzI1NiIsImtpZCI6Imp3dF9zeW1tZXRyaWNfa2V5In0.eyJ1c2VyaWQiOiI0VjRXS1FKR0dRN04iLCJleHAiOjE1NzYyMjk1MTYsInNjb3BlIjpbImRhdGE6cmVhZCIsImRhdGE6d3JpdGUiXSwiY2xpZW50X2lkIjoia0p0YkxZS2dHUjlOazh4MFZxbHJjMlkwM0lINXU5bFAiLCJncmFudF9pZCI6IjE1QjB4eGpSNUl3NXB6QXFQdjd0NkhzeGZiZGJVT3loIiwiYXVkIjoiaHR0cHM6Ly9hdXRvZGVzay5jb20vYXVkL2p3dGV4cDYwIiwianRpIjoiRVc1eUhEempGUUMxZHRrRXBqWlVkVld5enVXY21hTVB2emp2MUJyRHhKcHhuRHJIUUtPdUdrRExnZEVuOUV0TCJ9.g0-vS-jQhpv2VF49X8DY0L6UJV6zsWTU5K0X2IF6BEI",
+				"value": "",
 				"type": "string"
 			},
 			{

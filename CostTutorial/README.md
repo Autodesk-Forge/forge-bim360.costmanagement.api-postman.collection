@@ -33,7 +33,7 @@ This folder contains a Postman Collection that contains the requests cover the c
     - Access Token URL: https://developer.api.autodesk.com/authentication/v1/gettoken
 
 ### Tutorials of BIM360 Cost Management workflow
-- Step 1: List all the Hubs, and save **hub_id** for the 1st BIM360 Hub (Data Management API)
+- Step 1: List all the Hubs, and save **hub_id** for the 1st BIM360 Hub, also save **account_id** (Data Management API)
 - Step 2: List all the projects in the BIM360 Hub, and save **project_id** for the specified project(Data Management API).
 - Step 3: Get the information of the specified BIM360 project, and save **cost_container_id** for the Cost Container(Data Management API).
 - Step 4: Create a new budget, make sure your budget code follow the rule of budget code template which is set in BIM360 Cost Management project setting. Save **budget_id** for the budget you just created.
@@ -41,9 +41,9 @@ This folder contains a Postman Collection that contains the requests cover the c
 - Step 6: Create a new cost item, make sure it's assigned to the budget you created before. Save **costItem_id** for the cost item you just created.
 
 
-So far, you created a budget, contract, cost item, and also created the relationship among cost item, budget, contract. Next we can iterate step 6 ~ step 11 to create different change orders(PCO-RFQ-RCO-OCO-SCO) and perform actions on them based on the workflow.
+So far, you created a budget, contract, cost item, and also created the relationship among cost item, budget, contract. Next we can iterate step 7 ~ step 11 to create different change orders(PCO-RFQ-RCO-OCO-SCO) and perform actions on them based on the workflow.
 
-- Step 7: List all the change order types and save **changeOrder_type** for the type you will create and perform within this iteration.
+- Step 7: List all the change order types and change the index to set **changeOrder_type** to the type you want create and perform within this iteration.
 
 - Step 8: Create a new change order of the specified type, for RFQ|SCO, make sure the change order is assigned to the contract same as cost item. Save **changeOrder_id** for the new created change order.
 
@@ -52,6 +52,8 @@ So far, you created a budget, contract, cost item, and also created the relation
 - Step 10: Get all the avialable actions for this change order, save **action_name** for the action you want to perform later.
 
 - Step 11: Execute the action on the change order, and you can go to Step 10 to check the avialable actions and execut again until you are satisfied. 
+
+`NOTE:` You can itereate step 10 & 11 to get and execute different avialable actions to the change order. 
 
 Until now, you should have successfully created a change order with right status, if you want to generate a following change order, you can iterate from Step 7 ~ Step 11 again, you can reference [BIM360 Cost Management Doc](http://help.autodesk.com/view/BIM360D/ENU/?guid=BIM360D_Cost_Management_change_orders_html) for the typic workflow.
 

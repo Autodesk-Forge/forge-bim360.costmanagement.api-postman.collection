@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "e1910588-c4c1-4401-90b3-201cb25270fe",
 		"name": "BIM360 Cost Management learning tutorial",
-		"description": "The collection together with the environment shows you how to create a new budget with contract, and also create a change order with a couple of cost items, then you can use the available \"Action\" applied on the change order to change the status of the change order.\n\nSteps to operate with the endpoints:\n1. Before using the collection, please add the Authorization for the collection, click \"Edit Collection\", go to \"Authorization\" tab, make sure to use \"OAuth 2.0\" to get a 3 legged token, and use it in the \"Request Headers\".\n\n2. Follow step 1 to step 5 to create a budget which assigned to a contract, also create a cost item that will be attached to change orders in the following step.\n\n3. Iterate to do step 6 ~ step 11 to create different change order and perform action on that.",
+		"description": "The collection together with the environment shows you how to create a new budget with contract, and also create a change order with a couple of cost items, then you can use the available \"Action\" applied on the change order to change the status of the change order.\n\nSteps to operate with the endpoints:\n1. Step up the environment, please create a Forge App, and copy|paste \"client_id\", \"client_secret\" to the enviornment vailbale, and set the \"project_name\" to the name which you want to operate.\n\n2. Before using the collection, please add the Authorization for the collection, click \"Edit Collection\", go to \"Authorization\" tab, make sure to use \"OAuth 2.0\" to get a 3 legged token, and use it in the \"Request Headers\".\n\n3. Follow step 1 to step 5 to create a budget which assigned to a contract, also create a cost item that will be attached to change orders in the following step.\n\n4. Iterate to do step 6 ~ step 11 to get different change order types, and create the different orders then perform action on that based on your workflow.\n\t- PCO -> RFQ -> SCO\n\t- PCO -> RCO -> OCO -> SCO",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -22,6 +22,7 @@
 							"    console.log( index );",
 							"    if(responseBody.data[index].id.indexOf(\"b.\") != -1){",
 							"        postman.setEnvironmentVariable(\"hub_id\", responseBody.data[index].id);",
+							"        postman.setEnvironmentVariable(\"account_id\", responseBody.data[index].id.split(\"b.\").join(\"\"));",
 							"    }",
 							"}",
 							""
@@ -57,13 +58,24 @@
 						"exec": [
 							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
 							"",
-							"// setup the environment variable \"project_id\"",
+							"// find the specified project and setup the environment variable \"project_id\"",
+							"var project_name =  pm.environment.get(\"project_name\");",
 							"var responseBody = JSON.parse(responseBody);",
 							"for ( var index in responseBody.data) {",
-							"    if(responseBody.data[index].attributes.name == \"Sample Project used to test by Zhong\"){",
+							"    if(responseBody.data[index].attributes.name == project_name){",
 							"        postman.setEnvironmentVariable(\"project_id\", responseBody.data[index].id);",
 							"    }",
 							"}",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "da3a375e-4dc8-4a4b-9e08-bc185c8a8d8c",
+						"exec": [
 							""
 						],
 						"type": "text/javascript"
@@ -258,7 +270,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n        \"name\": \"My 1st cost item\",\n        \"description\": \"1st cost item\",\n        \"estimated\": \"1000.0000\",\n        \"proposed\": \"1000.0000\",\n        \"submitted\": \"1000.0000\",\n        \"approved\": \"1000.0000\",\n        \"committed\": \"1000.0000\",\n        \"budgetId\": \"{{budget_id}}\"\n      }"
+					"raw": "{\n        \"name\": \"My 1st cost item\",\n        \"description\": \"1st cost item\",\n        \"estimated\": \"1000.0000\",\n        \"proposed\": \"1000.0000\",\n        \"submitted\": \"1000.0000\",\n        \"approved\": \"1000.0000\",\n        \"committed\": \"1000.0000\",\n        \"budgetId\": \"{{budget_id}}\",\n        \"scope\": \"in\"\n      }"
 				},
 				"url": {
 					"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/cost-items",
@@ -276,6 +288,34 @@
 			"response": []
 		},
 		{
+			"name": "Iterate from Step 7 ~ Step 11",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "VIEW",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": ""
+				},
+				"description": "Use different \"changeOrder_type\" to create differnt change order and execute actions on that. You can create different change order typs(Pco, Rfq, Rco, Oco, Sco) by following the workflow."
+			},
+			"response": []
+		},
+		{
 			"name": "Step 7: Find change order types",
 			"event": [
 				{
@@ -283,7 +323,9 @@
 					"script": {
 						"id": "7d16a9a4-c870-4cb6-9a45-f2c83c9916fd",
 						"exec": [
-							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+							"pm.test(\"Status code is 200\", function () { ",
+							"    pm.response.to.have.status(200); ",
+							"});",
 							"",
 							"// setup the environment variable \"changeOrder_type\"",
 							"var responseBody = JSON.parse(responseBody);",
@@ -327,12 +369,27 @@
 					"script": {
 						"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
 						"exec": [
-							"pm.test(\"Status code is 201\", function () { pm.response.to.have.status(201); });",
+							"pm.test(\"Status code is 201\", function () { ",
+							"    pm.response.to.have.status(201); ",
+							"});",
 							"",
 							"// setup the environment variable \"changeOrder_id\"",
 							"var responseBody = JSON.parse(responseBody);",
 							"postman.setEnvironmentVariable(\"changeOrder_id\", responseBody.id);",
 							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "edbc30b2-8e55-41f1-ae93-65b9b3eaf3b2",
+						"exec": [
+							"",
+							"const changeOrder_type = pm.environment.get(\"changeOrder_type\");",
+							"const changeOrder_name = \"My Fist \" + changeOrder_type;",
+							"pm.environment.set(\"changeOrder_name\", changeOrder_name);"
 						],
 						"type": "text/javascript"
 					}
@@ -350,7 +407,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"My 1st PCO\",\n\t\"description\": \"1st PCO\",\n    \"scopeOfWork\": \"Scope of work\",\n    \"note\": \"note\"\n}"
+					"raw": "{\n\t\"name\": \"{{changeOrder_name}}\",\n\t\"description\": \"This is used for tutorial test\",\n    \"scopeOfWork\": \"Scope of work\",\n    \"note\": \"note\",\n    \"scope\": \"in\",\n    \"contractId\": \"{{contract_id}}\"\n}"
 				},
 				"url": {
 					"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/change-orders/{{changeOrder_type}}",
@@ -376,7 +433,9 @@
 					"script": {
 						"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
 						"exec": [
-							"pm.test(\"Status code is 201\", function () { pm.response.to.have.status(201); });",
+							"pm.test(\"Status code is 200\", function () { ",
+							"    pm.response.to.have.status(200); ",
+							"});",
 							"",
 							""
 						],
@@ -436,7 +495,8 @@
 					"script": {
 						"id": "d7d8e12e-2ac3-41cb-8fd4-188c92561507",
 						"exec": [
-							"pm.environment.set(\"association_type\", \"FormInstance\");"
+							"pm.environment.set(\"association_type\", \"FormInstance\");",
+							""
 						],
 						"type": "text/javascript"
 					}
@@ -493,8 +553,8 @@
 					"script": {
 						"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
 						"exec": [
-							"pm.test(\"Status code is 201\", function () {",
-							"    pm.response.to.have.status(201);",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -544,7 +604,7 @@
 		"oauth2": [
 			{
 				"key": "accessToken",
-				"value": "eyJhbGciOiJIUzI1NiIsImtpZCI6Imp3dF9zeW1tZXRyaWNfa2V5In0.eyJ1c2VyaWQiOiI0VjRXS1FKR0dRN04iLCJleHAiOjE1NzYxMDc3NzAsInNjb3BlIjpbImRhdGE6cmVhZCIsImRhdGE6d3JpdGUiXSwiY2xpZW50X2lkIjoia0p0YkxZS2dHUjlOazh4MFZxbHJjMlkwM0lINXU5bFAiLCJncmFudF9pZCI6IndVdHltNEQ4N0h5aVJTQ0prSE96UWwwQ1hQbDFJRmhiIiwiYXVkIjoiaHR0cHM6Ly9hdXRvZGVzay5jb20vYXVkL2p3dGV4cDYwIiwianRpIjoiVUNaN1VmSTNBNmtPajJtc2N4S1NNZE5VNG5JMmlPU01IUms5bzVuTHdwRERRdHRlZG53cVpZZmNlN2FqaEJUNCJ9.6RMq-hqMWSZHu2pCmwIG_BeR9NKyNO_Ax5HpoGG-vc8",
+				"value": "",
 				"type": "string"
 			},
 			{
