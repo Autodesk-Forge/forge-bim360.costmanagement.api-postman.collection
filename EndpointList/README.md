@@ -3,7 +3,7 @@
 ![Platforms](https://img.shields.io/badge/Web-Windows|MacOS-lightgray.svg)
 [![oAuth2](https://img.shields.io/badge/Authentication-v1-green.svg)](http://developer.autodesk.com/)
 [![Data-Management](https://img.shields.io/badge/Data%20Management-v2-green.svg)](http://developer.autodesk.com/)
-[![BIM360-CostManagement](https://img.shields.io/badge/BIM360%20Cost%20Management-v1-green.svg)](http://developer.autodesk.com/)
+[![BIM360-CostManagement](https://img.shields.io/badge/BIM360%20Cost%20Management-beta-green.svg)](http://developer.autodesk.com/)
 
 [![Postman](https://img.shields.io/badge/Postman-v7-orange.svg)](https://www.getpostman.com/)
 
@@ -33,3 +33,6 @@ This folder contains a Postman Collection that includes all the current BIM360 C
     - Access Token URL: https://developer.api.autodesk.com/authentication/v1/gettoken
 
 ### Use the endpoints under **Setup cost container id** to set cost_container_id, then you can play with any Endpoint as you want.
+
+## Tips & Tricks
+- These endpoints are mainly used to quick test|verfify based on your good understanding to cost module and API, the individual endpoint may not work, you need to set up the environment variables before running the Postman request.

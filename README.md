@@ -1,11 +1,9 @@
 # BIM360 Cost Management API Documentation Postman Collection Git Repo
 
-This repository contains several tutorials that teach you how to use Forge APIs. The Forge Portal also contains Step-by-Step tutorials for the same purpose. The tutorials on Forge use [cURL](https://curl.haxx.se/) to send HTTP requests to Forge, while the tutorials in this repository use [Postman](https://www.getpostman.com/). The tutorials on the Forge portal and this repository demonstrate the same workflows. They differ only by the tool used to send HTTP requests.
+This repository contains 2 API collections as follow for different purpose which could help you understand the usage of BIM 360 Cost Managment API:
 
-Currently, this repository contains tutorials for the following:
-
-- [BIM360 Cost Management Tutorial](CostTutorial)
-- [BIM360 Cost Management API List](EndpointList)
+- [BIM360 Cost Management Tutorial](CostTutorial), includes a set of API working as tutorial of cost workflow.
+- [BIM360 Cost Management API List](EndpointList), includes cost API list that helps quick test or verify each endpoint. 
 
 
 ## What's Postman?
