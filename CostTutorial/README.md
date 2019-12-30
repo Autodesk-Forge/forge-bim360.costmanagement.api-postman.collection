@@ -58,3 +58,9 @@ So far, you created a budget, contract, cost item, and also created the relation
 Until now, you should have successfully created a change order with right status, if you want to generate a following change order, you can iterate from Step 7 ~ Step 11 again, you can reference [BIM360 Cost Management Doc](http://help.autodesk.com/view/BIM360D/ENU/?guid=BIM360D_Cost_Management_change_orders_html) for the typic workflow.
 
 ![typical financial workflow](Img/cm-workflowphase.png)
+
+## License
+This sample is licensed under the terms of the [MIT License](http://opensource.org/licenses/MIT). Please see the [LICENSE](LICENSE) file for full details.
+
+## Written by
+Zhong Wu [@johnonsoftware](https://twitter.com/johnonsoftware), [Forge Partner Development](http://forge.autodesk.com)

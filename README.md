@@ -17,3 +17,9 @@ Postman is a popular tool that provides an easy-to-use interface to send HTTP re
 ## What next?
 
 To follow a tutorial, click the corresponding link in the list of tutorials or navigate to the corresponding folder in this repository. The *readme.md* file in the folder provides instructions on how to follow that tutorial. 
+
+## License
+This sample is licensed under the terms of the [MIT License](http://opensource.org/licenses/MIT). Please see the [LICENSE](LICENSE) file for full details.
+
+## Written by
+Zhong Wu [@johnonsoftware](https://twitter.com/johnonsoftware), [Forge Partner Development](http://forge.autodesk.com)
