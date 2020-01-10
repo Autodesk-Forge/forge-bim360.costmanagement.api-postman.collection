@@ -76,7 +76,7 @@
 					"script": {
 						"id": "da3a375e-4dc8-4a4b-9e08-bc185c8a8d8c",
 						"exec": [
-							""
+							"pm.environment.set(\"project_name\", \"Your project name\");"
 						],
 						"type": "text/javascript"
 					}
@@ -329,7 +329,7 @@
 							"",
 							"// setup the environment variable \"changeOrder_type\"",
 							"var responseBody = JSON.parse(responseBody);",
-							"postman.setEnvironmentVariable(\"changeOrder_type\", responseBody[2].type);",
+							"postman.setEnvironmentVariable(\"changeOrder_type\", responseBody[0].type);",
 							""
 						],
 						"type": "text/javascript"
