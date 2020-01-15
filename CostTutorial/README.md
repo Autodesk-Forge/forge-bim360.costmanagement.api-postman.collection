@@ -13,6 +13,8 @@
 This folder contains a Postman Collection that contains the requests cover the current main workflow of BIM360 Cost Management. The collection together with the environment shows you how to create a new budget with contract, create a cost item, and create different change orders then attach to the cost item, you can also use the available "Action" applied on the change order to change the status of the change order.
 ![Collection](Img/collection.png)
 
+## Demonstration
+[![https://youtu.be/UCRWpUwLifo](http://img.youtube.com/vi/UCRWpUwLifo/0.jpg)](https://youtu.be/UCRWpUwLifo "BIM 360 Cost Management tutorial")
 
 ## Instructions to run the Postman tutorial are as below:
 
@@ -25,6 +27,8 @@ This folder contains a Postman Collection that contains the requests cover the c
     - client_id:     Forge App Id.
     - client_secret: Forge App Secrect. 
     - project_name:  The project name that you want to operate on.
+
+**Please watch the [Video](https://youtu.be/UCRWpUwLifo) for the detail workflow, or follow the steps:**
 
 - Please add the Authorization for the collection, click **Edit Collection**, go to **Authorization** tab, make sure to use **OAuth 2.0** to get a 3 legged token, use it in the **Request Headers**.
 ![3leggedToken](Img/3leggedToken.png)
