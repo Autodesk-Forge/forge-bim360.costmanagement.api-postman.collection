@@ -19,13 +19,22 @@
 							"// setup the environment variable \"hub_id\"",
 							"var responseBody = JSON.parse(responseBody);",
 							"for ( var index in responseBody.data) {",
-							"    console.log( index );",
 							"    if(responseBody.data[index].id.indexOf(\"b.\") != -1){",
 							"        postman.setEnvironmentVariable(\"hub_id\", responseBody.data[index].id);",
 							"        postman.setEnvironmentVariable(\"account_id\", responseBody.data[index].id.split(\"b.\").join(\"\"));",
 							"    }",
 							"}",
 							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "8cfa97b8-c4f1-4a80-90e2-50e3e7a1dadb",
+						"exec": [
+							"pm.environment.unset(\"changeOrder_index\");"
 						],
 						"type": "text/javascript"
 					}
@@ -329,8 +338,34 @@
 							"",
 							"// setup the environment variable \"changeOrder_type\"",
 							"var responseBody = JSON.parse(responseBody);",
-							"postman.setEnvironmentVariable(\"changeOrder_type\", responseBody[0].type);",
+							"",
+							"var index = pm.environment.get(\"changeOrder_index\");",
+							"console.log(index)",
+							"// stop postman collection runner while index is out of range",
+							"if( index >= responseBody.length ){",
+							"    postman.setNextRequest('Stop the collection');",
+							"}else{",
+							"    postman.setEnvironmentVariable(\"changeOrder_type\", responseBody[index].type);",
+							"}",
 							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "0235d5a1-7756-4956-95f6-4e1a7d6ab4ff",
+						"exec": [
+							"",
+							"var index = pm.environment.get(\"changeOrder_index\");",
+							"if( index != null ){",
+							"    console.log(\"current change order index is: \" + (index+1));",
+							"    pm.environment.set(\"changeOrder_index\", index+1);",
+							"}else{",
+							"    console.log(\"current change order index is not set\");",
+							"    pm.environment.set(\"changeOrder_index\", 0);",
+							"}"
 						],
 						"type": "text/javascript"
 					}
@@ -484,7 +519,13 @@
 							"",
 							"// setup the environment variable \"action_name\"",
 							"var responseBody = JSON.parse(responseBody);",
-							"postman.setEnvironmentVariable(\"action_name\", responseBody[0].name);",
+							"",
+							"// execute the action on the change order, if the action is done for this change order, go back to step 7 to start a new change order.",
+							"if(responseBody.length === 0 || responseBody[0].name == \"reject\" || responseBody[0].name == \"acceptedToSubmit\" || responseBody[0].name == \"forceResubmit\"  ){",
+							"    postman.setNextRequest('Step 7: Find change order types');",
+							"}else{",
+							"    postman.setEnvironmentVariable(\"action_name\", responseBody[0].name);",
+							"}",
 							""
 						],
 						"type": "text/javascript"
@@ -555,7 +596,9 @@
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
-							"});"
+							"});",
+							"",
+							"postman.setNextRequest('Step 10: Get all avialable actions for the change order');"
 						],
 						"type": "text/javascript"
 					}
