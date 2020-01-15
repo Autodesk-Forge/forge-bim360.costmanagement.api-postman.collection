@@ -16,19 +16,18 @@ This folder contains a Postman Collection that contains the requests cover the c
 ## Demonstration
 [![https://youtu.be/UCRWpUwLifo](http://img.youtube.com/vi/UCRWpUwLifo/0.jpg)](https://youtu.be/UCRWpUwLifo "BIM 360 Cost Management tutorial")
 
-## Instructions to run the Postman tutorial are as below:
-
-### Preparation before you begin:
+## Preparation before you begin:
 - [Create Forge App, get access to a BIM 360 Account](https://forge.autodesk.com/en/docs/bim360/v1/tutorials/getting-started/get-access-to-account/)
 - [Create BIM360 project, activate Cost Management module, setup project for Cost Management](https://help.autodesk.com/view/BIM360D/ENU/?guid=BIM360D_Cost_Management_getting_started_with_cost_management_html);
+
+## Instructions to run the Postman tutorial are as below:
+
+**Please watch the [Video](https://youtu.be/UCRWpUwLifo) for the detail workflow, or follow the steps:**
 
 ### Setup Postman environment and Authorization:
 - Import Postman environment & collection, please setup the following environment vialables, 
     - client_id:     Forge App Id.
     - client_secret: Forge App Secrect. 
-    - project_name:  The project name that you want to operate on.
-
-**Please watch the [Video](https://youtu.be/UCRWpUwLifo) for the detail workflow, or follow the steps:**
 
 - Please add the Authorization for the collection, click **Edit Collection**, go to **Authorization** tab, make sure to use **OAuth 2.0** to get a 3 legged token, use it in the **Request Headers**.
 ![3leggedToken](Img/3leggedToken.png)
@@ -38,7 +37,7 @@ This folder contains a Postman Collection that contains the requests cover the c
 
 ### Tutorials of BIM360 Cost Management workflow
 - Step 1: List all the Hubs, and save **hub_id** for the 1st BIM360 Hub, also save **account_id** (Data Management API)
-- Step 2: List all the projects in the BIM360 Hub, and save **project_id** for the specified project(Data Management API).
+- Step 2: List all the projects in the BIM360 Hub, specify the **project_name** in **Pre-request Script** which you want to work with, then get **project_id** for the specified project and save it(Data Management API).
 - Step 3: Get the information of the specified BIM360 project, and save **cost_container_id** for the Cost Container(Data Management API).
 - Step 4: Create a new budget, make sure your budget code follow the rule of budget code template which is set in BIM360 Cost Management project setting. Save **budget_id** for the budget you just created.
 - Step 5: Create a new contract, make sure you assign the previously created budget to the contract. Save **contract_id** for the contract you just created.
