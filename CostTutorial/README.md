@@ -62,6 +62,27 @@ Until now, you should have successfully created a change order with right status
 
 ![typical financial workflow](Img/cm-workflowphase.png)
 
+## Further Reading
+### Automate Workflow with Postman Collection Runner
+**With the help of the Postman Collection Runner, you can actually automate the workflow, it helps you to quick verify your workflow with BIM 360 Cost Management API, or to do automation test to catch all the API issues|regresions**
+
+![bim360 workflow automation test](Img/automationtest.png)
+
+**Please watch the [Video](https://youtu.be/h_eFFf8f9UY) for the detail workflow, or follow the steps:**
+
+### Tutorials about workflow
+
+- Import the Postman **Collection** and **Environment** under the same folder.
+- Please add the Authorization for the collection, click **Edit Collection**, go to **Authorization** tab, make sure to use **OAuth 2.0** to get a 3 legged token, use it in the **Request Headers**.
+![3leggedToken](Img/3leggedToken.png)
+    - Callback URL: https://www.getpostman.com/oauth2/callback
+    - Auth URL: https://developer.api.autodesk.com/authentication/v1/authorize 
+    - Access Token URL: https://developer.api.autodesk.com/authentication/v1/gettoken
+- Run Postman **Collection Runner**, select the collection, uncheck the request of **VIEW Iterate from Step 7 ~ Step 11**, select the environment, set **Delay** to 1000ms
+- Click **Run BIM360 Cost...** button to start, you will see the result of the workflow.
+
+**Note:** The collection will firstly automatically create a budget, then crate a contract and assign the budget to the contract,  after that, create a cost item, and then create different change orders(PCO-RFQ-RCO-OCO-SCO) and attach with the cost item, perform available actions on these change orders.   
+
 ## License
 This sample is licensed under the terms of the [MIT License](http://opensource.org/licenses/MIT). Please see the [LICENSE](LICENSE) file for full details.
 
