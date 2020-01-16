@@ -52,11 +52,11 @@ So far, you created a budget, contract, cost item, and also created the relation
 
 - Step 9: Attach the change order with cost item.
 
-- Step 10: Get all the avialable actions for this change order, save **action_name** for the action you want to perform later.
+- Step 10: Get all the available actions for this change order, save **action_name** for the action you want to perform later.
 
-- Step 11: Execute the action on the change order, and you can go to Step 10 to check the avialable actions and execut again until you are satisfied. 
+- Step 11: Execute the action on the change order, and you can go to Step 10 to check the available actions and execut again until you are satisfied. 
 
-`NOTE:` You can itereate step 10 & 11 to get and execute different avialable actions to the change order. 
+`NOTE:` You can itereate step 10 & 11 to get and execute different available actions to the change order. 
 
 Until now, you should have successfully created a change order with right status, if you want to generate a following change order, you can iterate from Step 7 ~ Step 11 again, you can reference [BIM360 Cost Management Doc](http://help.autodesk.com/view/BIM360D/ENU/?guid=BIM360D_Cost_Management_change_orders_html) for the typic workflow.
 

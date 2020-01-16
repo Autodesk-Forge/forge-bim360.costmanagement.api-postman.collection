@@ -508,7 +508,7 @@
 			"response": []
 		},
 		{
-			"name": "Step 10: Get all avialable actions for the change order",
+			"name": "Step 10: Get all available actions for the change order",
 			"event": [
 				{
 					"listen": "test",
@@ -598,7 +598,7 @@
 							"    pm.response.to.have.status(200);",
 							"});",
 							"",
-							"postman.setNextRequest('Step 10: Get all avialable actions for the change order');"
+							"postman.setNextRequest('Step 10: Get all available actions for the change order');"
 						],
 						"type": "text/javascript"
 					}

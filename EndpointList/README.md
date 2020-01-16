@@ -1,4 +1,4 @@
-# BIM360 Cost Management Step-by-Step Tutorial
+# BIM360 Cost Management API List
 
 ![Platforms](https://img.shields.io/badge/Web-Windows|MacOS-lightgray.svg)
 [![oAuth2](https://img.shields.io/badge/Authentication-v1-green.svg)](http://developer.autodesk.com/)
