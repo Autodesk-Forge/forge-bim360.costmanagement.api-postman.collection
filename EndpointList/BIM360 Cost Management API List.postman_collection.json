@@ -82,7 +82,7 @@
 							"script": {
 								"id": "d0cd5145-8f97-47aa-a136-0c42d2309e11",
 								"exec": [
-									""
+									"pm.environment.set(\"project_name\", \"change to your project name\");"
 								],
 								"type": "text/javascript"
 							}
@@ -205,7 +205,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/budgets?",
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/budgets",
 							"host": [
 								"{{base_domain}}cost"
 							],
@@ -223,17 +223,17 @@
 								},
 								{
 									"key": "filter[rootId]",
-									"value": "c0ee92b0-e320-11e9-9ee1-4d815e0b7232",
+									"value": "",
 									"disabled": true
 								},
 								{
 									"key": "filter[id]",
-									"value": "c0ee92b0-e320-11e9-9ee1-4d815e0b7232",
+									"value": "",
 									"disabled": true
 								},
 								{
 									"key": "filter[code]",
-									"value": "001",
+									"value": "",
 									"disabled": true
 								},
 								{
@@ -274,7 +274,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/budgets/{{budget_id}}?include=subitems,attributes",
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/budgets/{{budget_id}}?",
 							"host": [
 								"{{base_domain}}cost"
 							],
@@ -288,11 +288,12 @@
 							"query": [
 								{
 									"key": "include",
-									"value": "subitems,attributes"
+									"value": "subitems,attributes",
+									"disabled": true
 								},
 								{
 									"key": "filter[rootId]",
-									"value": "c0ee92b0-e320-11e9-9ee1-4d815e0b7232",
+									"value": "",
 									"disabled": true
 								}
 							]
@@ -303,6 +304,20 @@
 				},
 				{
 					"name": "PATCH\tbudgets/:budgetId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7a71f75b-3983-4d4b-9698-b717db5e8353",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "PATCH",
 						"header": [
@@ -391,6 +406,20 @@
 				},
 				{
 					"name": "DELETE\tbudgets/:budgetId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "764a55a6-02f5-4374-8307-c19818bdb1ba",
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -423,6 +452,10 @@
 							"script": {
 								"id": "e3f15d13-d21d-4cc4-b166-1ab8be3e07f1",
 								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
 									"var data = JSON.parse(responseBody);",
 									"postman.setEnvironmentVariable(\"budget_id\", data[0].id);",
 									""
@@ -525,7 +558,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/contracts",
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/contracts?",
 							"host": [
 								"{{base_domain}}cost"
 							],
@@ -598,7 +631,9 @@
 							"script": {
 								"id": "cfca5644-3012-4e47-af4d-9e20bf186a36",
 								"exec": [
-									""
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
 								],
 								"type": "text/javascript"
 							}
@@ -608,8 +643,8 @@
 							"script": {
 								"id": "7e275243-a3b5-4484-862d-d6be21bd0d00",
 								"exec": [
-									"pm.environment.set(\"company_id\", \"57214049\");",
-									"pm.environment.set(\"user_id\", \"200902260532621\");"
+									"pm.environment.set(\"company_id\", \"change to your company id\");",
+									"pm.environment.set(\"user_id\", \"change to your use id\");"
 								],
 								"type": "text/javascript"
 							}
@@ -653,8 +688,8 @@
 							"script": {
 								"id": "cfca5644-3012-4e47-af4d-9e20bf186a36",
 								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
 									"});",
 									"",
 									"var data = JSON.parse(responseBody);",
@@ -702,7 +737,9 @@
 							"script": {
 								"id": "cfca5644-3012-4e47-af4d-9e20bf186a36",
 								"exec": [
-									""
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
 								],
 								"type": "text/javascript"
 							}
@@ -736,7 +773,7 @@
 			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "Change Order and Cost Item",
+			"name": "Change Orders",
 			"item": [
 				{
 					"name": "GET change-orders",
@@ -746,6 +783,11 @@
 							"script": {
 								"id": "7d16a9a4-c870-4cb6-9a45-f2c83c9916fd",
 								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
 									"var data = JSON.parse(responseBody);",
 									"postman.setEnvironmentVariable(\"changeOrder_type\", data[0].type);",
 									""
@@ -788,6 +830,10 @@
 							"script": {
 								"id": "8d6d7bb5-1d9d-444c-bb67-a61ad8228445",
 								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
 									"var data = JSON.parse(responseBody);",
 									"postman.setEnvironmentVariable(\"changeOrder_id\", data.results[0].id);",
 									""
@@ -831,6 +877,21 @@
 				},
 				{
 					"name": "Get change-orders/:changeOrder/:id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "fe4fb402-de8b-4fbc-ba03-71234776a73b",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -866,7 +927,19 @@
 							"script": {
 								"id": "e15aa082-d4a9-4766-bb4b-a1e4a12a172c",
 								"exec": [
-									"pm.environment.set(\"recipient_id\", \"CED9SFEVTLHNXV\");"
+									"pm.environment.set(\"recipient_id\", \"change to user id\");"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "21d4043f-733e-4959-a661-b152be7706e9",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
 								],
 								"type": "text/javascript"
 							}
@@ -911,6 +984,10 @@
 							"script": {
 								"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
 								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
 									"var data = JSON.parse(responseBody);",
 									"postman.setEnvironmentVariable(\"changeOrder_id\", data.id);",
 									""
@@ -952,6 +1029,20 @@
 				},
 				{
 					"name": "DELETE change-orders/:changeOrder/:id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "959cdd5f-bf9c-4b85-84cc-87b7b757c601",
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -976,7 +1067,13 @@
 						"description": "Delete an existing change order"
 					},
 					"response": []
-				},
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Cost Items",
+			"item": [
 				{
 					"name": "GET cost-items",
 					"event": [
@@ -985,6 +1082,10 @@
 							"script": {
 								"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
 								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
 									"var data = JSON.parse(responseBody);",
 									"postman.setEnvironmentVariable(\"costItem_id\", data.results[0].id);",
 									""
@@ -1034,7 +1135,9 @@
 							"script": {
 								"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
 								"exec": [
-									""
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
 								],
 								"type": "text/javascript"
 							}
@@ -1081,7 +1184,9 @@
 							"script": {
 								"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
 								"exec": [
-									""
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
 								],
 								"type": "text/javascript"
 							}
@@ -1099,7 +1204,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"name\": \"Renamed\",\n        \"description\": \"Reviafafr ASI001\",\n        \"estimated\": \"9000.0000\",\n        \"proposed\": \"9000.0000\",\n        \"submitted\": \"9000.0000\",\n        \"approved\": \"9000.0000\",\n        \"committed\": \"9000.0000\"\n\t\n}"
+							"raw": "{\n        \"name\": \"Renamed\",\n        \"description\": \"updated cost item description\",\n        \"estimated\": \"9000.0000\",\n        \"proposed\": \"9000.0000\",\n        \"submitted\": \"9000.0000\",\n        \"approved\": \"9000.0000\",\n        \"committed\": \"9000.0000\"\n\t\n}"
 						},
 						"url": {
 							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/cost-items/{{costItem_id}}",
@@ -1126,6 +1231,10 @@
 							"script": {
 								"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
 								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
 									"var data = JSON.parse(responseBody);",
 									"postman.setEnvironmentVariable(\"costItem_id\", data.id);",
 									""
@@ -1203,7 +1312,13 @@
 						"description": "Delete an existing cost item."
 					},
 					"response": []
-				},
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Change Order and Cost Item",
+			"item": [
 				{
 					"name": "POST cost-items:attach",
 					"event": [
@@ -1212,7 +1327,9 @@
 							"script": {
 								"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
 								"exec": [
-									""
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
 								],
 								"type": "text/javascript"
 							}
@@ -1256,7 +1373,9 @@
 							"script": {
 								"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
 								"exec": [
-									""
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
 								],
 								"type": "text/javascript"
 							}
@@ -1306,6 +1425,10 @@
 							"script": {
 								"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
 								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
 									"var data = JSON.parse(responseBody);",
 									"postman.setEnvironmentVariable(\"folder_id\", data.id);",
 									""
@@ -1318,7 +1441,8 @@
 							"script": {
 								"id": "7e0ba9a7-d18e-40e9-98e8-4af40c90e575",
 								"exec": [
-									"pm.environment.set(\"association_type\", \"Contract\");"
+									"pm.environment.set(\"association_type\", \"change to your association type\");",
+									"pm.environment.set(\"association_type\", \"change to your association id\");"
 								],
 								"type": "text/javascript"
 							}
@@ -1336,7 +1460,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"associationId\": \"{{contract_id}}\",\n        \"associationType\": \"{{association_type}}\"\n}"
+							"raw": "{\n        \"associationId\": \"{{association_id}}\",\n        \"associationType\": \"{{association_type}}\"\n}"
 						},
 						"url": {
 							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/attachment-folders",
@@ -1362,6 +1486,10 @@
 							"script": {
 								"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
 								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
 									"var data = JSON.parse(responseBody);",
 									"postman.setEnvironmentVariable(\"attachment_id\", data.id);",
 									""
@@ -1374,8 +1502,9 @@
 							"script": {
 								"id": "66e88806-7c0c-4c87-83d4-b64999c51042",
 								"exec": [
-									"pm.environment.set(\"attachment_urn\", \"urn:adsk.wipprod:fs.file:vf.zvk69QogTzeTjyHS1V61tg?version=1\");",
-									"pm.environment.set(\"association_type\", \"Contract\");"
+									"pm.environment.set(\"attachment_urn\", \"change to your attachment urn\");",
+									"pm.environment.set(\"association_type\", \"change to your association type\");",
+									"pm.environment.set(\"association_id\", \"change to your association id\");"
 								],
 								"type": "text/javascript"
 							}
@@ -1419,6 +1548,10 @@
 							"script": {
 								"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
 								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
 									"var data = JSON.parse(responseBody);",
 									"postman.setEnvironmentVariable(\"attachment_id\", data[0].id);",
 									""
@@ -1450,7 +1583,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/attachments?associationId={{contract_id}}&associationType={{association_type}}",
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/attachments?associationId={{association_id}}&associationType={{association_type}}",
 							"host": [
 								"{{base_domain}}cost"
 							],
@@ -1463,7 +1596,7 @@
 							"query": [
 								{
 									"key": "associationId",
-									"value": "{{contract_id}}"
+									"value": "{{association_id}}"
 								},
 								{
 									"key": "associationType",
@@ -1483,6 +1616,10 @@
 							"script": {
 								"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
 								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});",
+									"",
 									"pm.environment.unset(\"attachment_id\");"
 								],
 								"type": "text/javascript"
@@ -1525,7 +1662,7 @@
 			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "Custom Attribute",
+			"name": "Attribute Definitions",
 			"item": [
 				{
 					"name": "GET\tproperties",
@@ -1535,6 +1672,10 @@
 							"script": {
 								"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
 								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
 									"var data = JSON.parse(responseBody);",
 									"postman.setEnvironmentVariable(\"property_definition_id\", data[0].id);",
 									""
@@ -1547,7 +1688,7 @@
 							"script": {
 								"id": "1efb7b78-9a9f-4e74-9465-8deeaabdcfa2",
 								"exec": [
-									"pm.environment.set(\"association_type\", \"Budget\");"
+									"pm.environment.set(\"association_type\", \"change to your association type\");"
 								],
 								"type": "text/javascript"
 							}
@@ -1581,7 +1722,7 @@
 								},
 								{
 									"key": "filter[name]",
-									"value": "Type",
+									"value": "",
 									"disabled": true
 								}
 							]
@@ -1589,7 +1730,13 @@
 						"description": "List all the attribute definitions created to define custom attributes for a given module."
 					},
 					"response": []
-				},
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Attribute Values",
+			"item": [
 				{
 					"name": "POST property-values:batch-update",
 					"event": [
@@ -1598,7 +1745,19 @@
 							"script": {
 								"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
 								"exec": [
-									""
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "e0822579-6c94-49bb-9f92-ea0b6dbde2ae",
+								"exec": [
+									"pm.environment.set(\"property_value\", \"change to your property value\");"
 								],
 								"type": "text/javascript"
 							}
@@ -1620,7 +1779,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "[\n        {\n          \"associationType\":\"{{association_type}}\",\n          \"associationId\":\"{{association_id}}\",\n          \"propertyDefinitionId\": \"{{property_definition_id}}\",\n          \"value\": \"A\"\n        }\n]"
+							"raw": "[\n        {\n          \"associationType\":\"{{association_type}}\",\n          \"associationId\":\"{{association_id}}\",\n          \"propertyDefinitionId\": \"{{property_definition_id}}\",\n          \"value\": \"{{property_value}}\"\n        }\n]"
 						},
 						"url": {
 							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/property-values:batch-update",
@@ -1639,10 +1798,32 @@
 					"response": []
 				}
 			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "1a5116a8-8c27-457f-8136-77929e2ee339",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "1b18ed42-ac67-423a-98ee-7d3590d7b4b0",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
 			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "Generated Document",
+			"name": "Document",
 			"item": [
 				{
 					"name": "GET\tdocuments",
@@ -1652,6 +1833,10 @@
 							"script": {
 								"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
 								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
 									"var data = JSON.parse(responseBody);",
 									"postman.setEnvironmentVariable(\"document_id\", data[0].id);",
 									""
@@ -1664,7 +1849,7 @@
 							"script": {
 								"id": "94535971-fb94-4a0e-baa4-705b8a212949",
 								"exec": [
-									"pm.environment.set(\"association_type\", \"FormInstance\");"
+									"pm.environment.set(\"association_type\", \"change to your association type\");"
 								],
 								"type": "text/javascript"
 							}
@@ -1710,7 +1895,7 @@
 			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "Generated File Package",
+			"name": "File Package",
 			"item": [
 				{
 					"name": "GET\tfile-packages",
@@ -1720,6 +1905,10 @@
 							"script": {
 								"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
 								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
 									"var data = JSON.parse(responseBody);",
 									"postman.setEnvironmentVariable(\"file_package_id\", data[0].id);",
 									"postman.setEnvironmentVariable(\"file_package_item_id\", data[0].items[0].id);",
@@ -1733,7 +1922,8 @@
 							"script": {
 								"id": "07909169-e5cf-4c30-bc4f-4515f674039e",
 								"exec": [
-									"pm.environment.set(\"association_type\", \"Contract\");"
+									"pm.environment.set(\"association_type\", \"change to your association type\");",
+									"pm.environment.set(\"association_id\", \"change to your association id\");"
 								],
 								"type": "text/javascript"
 							}
@@ -1794,7 +1984,9 @@
 							"script": {
 								"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
 								"exec": [
-									"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
 									"",
 									"// setup the environment variable \"action_name\"",
 									"var responseBody = JSON.parse(responseBody);",
@@ -1810,25 +2002,13 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{access_token}}"
-							},
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text",
-								"disabled": true
-							}
-						],
+						"header": [],
 						"body": {
 							"mode": "raw",
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/workflows/{{association_type}}/{{association-id}}/actions?",
+							"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/workflows/{{association_type}}/{{association-id}}/actions",
 							"host": [
 								"{{base_domain}}cost"
 							],
@@ -1840,13 +2020,6 @@
 								"{{association_type}}",
 								"{{association-id}}",
 								"actions"
-							],
-							"query": [
-								{
-									"key": "filter[actionType]",
-									"value": "workflow,system,generateChangeOrder",
-									"disabled": true
-								}
 							]
 						},
 						"description": "List the actions that can execute on the specified item according to the item’s current state."
@@ -1861,7 +2034,21 @@
 							"script": {
 								"id": "d3a9e2af-0bc3-4d81-9bc4-9f4fa42fc1fe",
 								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
 									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "47c330ee-ed27-4a44-a4aa-764be9bb9c27",
+								"exec": [
+									"pm.environment.set(\"association_type\", \"change to your association type\");",
+									"pm.environment.set(\"association_id\", \"change to your association id\");"
 								],
 								"type": "text/javascript"
 							}
@@ -1870,10 +2057,6 @@
 					"request": {
 						"method": "POST",
 						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{access_token}}"
-							},
 							{
 								"key": "Content-Type",
 								"name": "Content-Type",
@@ -1896,13 +2079,6 @@
 								"{{cost_container_id}}",
 								"workflows",
 								"actions"
-							],
-							"query": [
-								{
-									"key": "filter[name]",
-									"value": "Type",
-									"disabled": true
-								}
 							]
 						},
 						"description": "Perform a specified action on an item."
