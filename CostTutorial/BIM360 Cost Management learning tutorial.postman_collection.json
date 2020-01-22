@@ -85,7 +85,10 @@
 					"script": {
 						"id": "da3a375e-4dc8-4a4b-9e08-bc185c8a8d8c",
 						"exec": [
-							"pm.environment.set(\"project_name\", \"Your project name\");"
+							"var project_name =  pm.environment.get(\"project_name\");",
+							"if( project_name == null || project_name == '' ){",
+							"    pm.environment.set(\"project_name\", \"Change to your project name\");",
+							"}"
 						],
 						"type": "text/javascript"
 					}
@@ -336,11 +339,9 @@
 							"    pm.response.to.have.status(200); ",
 							"});",
 							"",
-							"// setup the environment variable \"changeOrder_type\"",
 							"var responseBody = JSON.parse(responseBody);",
 							"",
 							"var index = pm.environment.get(\"changeOrder_index\");",
-							"console.log(index)",
 							"// stop postman collection runner while index is out of range",
 							"if( index >= responseBody.length ){",
 							"    postman.setNextRequest('Stop the collection');",
