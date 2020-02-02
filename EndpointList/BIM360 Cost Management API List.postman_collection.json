@@ -82,7 +82,10 @@
 							"script": {
 								"id": "d0cd5145-8f97-47aa-a136-0c42d2309e11",
 								"exec": [
-									"pm.environment.set(\"project_name\", \"change to your project name\");"
+									"var project_name =  pm.environment.get(\"project_name\");",
+									"if( project_name == null || project_name == '' ){",
+									"    pm.environment.set(\"project_name\", \"Change to your project name\");",
+									"}"
 								],
 								"type": "text/javascript"
 							}
