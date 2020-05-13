@@ -1,11 +1,67 @@
 {
 	"info": {
-		"_postman_id": "e1910588-c4c1-4401-90b3-201cb25270fe",
+		"_postman_id": "d02860a2-2a6f-4e68-b018-d89ab621c0c0",
 		"name": "BIM360 Cost Management learning tutorial",
 		"description": "The collection together with the environment shows you how to create a new budget with contract, and also create a change order with a couple of cost items, then you can use the available \"Action\" applied on the change order to change the status of the change order.\n\nSteps to operate with the endpoints:\n1. Step up the environment, please create a Forge App, and copy|paste \"client_id\", \"client_secret\" to the enviornment vailbale, and set the \"project_name\" to the name which you want to operate.\n\n2. Before using the collection, please add the Authorization for the collection, click \"Edit Collection\", go to \"Authorization\" tab, make sure to use \"OAuth 2.0\" to get a 3 legged token, and use it in the \"Request Headers\".\n\n3. Follow step 1 to step 5 to create a budget which assigned to a contract, also create a cost item that will be attached to change orders in the following step.\n\n4. Iterate to do step 6 ~ step 11 to get different change order types, and create the different orders then perform action on that based on your workflow.\n\t- PCO -> RFQ -> SCO\n\t- PCO -> RCO -> OCO -> SCO",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
+		{
+			"name": "Step 0: Reset the environment variables",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a2871248-36c1-45ed-b2e8-27d12cfe521d",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "da24b000-02d8-4199-afda-a9390e1fb385",
+						"exec": [
+							"pm.environment.clear();",
+							"",
+							"// Please change the following variables according to your account setting",
+							"// your Forge App key",
+							"pm.environment.set(\"client_id\",     \"your_forge_client_id\");",
+							"pm.environment.set(\"client_secret\", \"your_forge_client_secret\");",
+							"",
+							"// Change to the specified project name",
+							"pm.environment.set(\"project_name\", \"Change to your project name\");",
+							"",
+							"pm.environment.set(\"base_domain\", \"https://developer.api.autodesk.com/\");",
+							"",
+							"pm.environment.set(\"changeOrder_index\", 0);",
+							"pm.environment.set(\"action_association_type\", \"FormInstance\");",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "VIEW",
+				"header": [],
+				"url": {
+					"raw": "{{base_domain}}/health",
+					"host": [
+						"{{base_domain}}"
+					],
+					"path": [
+						"health"
+					]
+				},
+				"description": "Reset the following environment variables:\n1. Forge Client Key, please change to your Forge Client Id and Secret.\n2. Project name, please change to the correct project name which you want to work with.\n3. Base domain, should be https://developer.api.autodesk.com/ by default.\n4. Segment index, will be used to create multiple budget segments, should be 1 by default."
+			},
+			"response": []
+		},
 		{
 			"name": "Step 1: Find all hubs within your account",
 			"event": [
@@ -16,15 +72,14 @@
 						"exec": [
 							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
 							"",
-							"// setup the environment variable \"hub_id\"",
+							"// setup the environment variable \"hub_id\" and \"account_id\" with the 1st BIM360 hub",
 							"var responseBody = JSON.parse(responseBody);",
-							"for ( var index in responseBody.data) {",
-							"    if(responseBody.data[index].id.indexOf(\"b.\") != -1){",
-							"        postman.setEnvironmentVariable(\"hub_id\", responseBody.data[index].id);",
-							"        postman.setEnvironmentVariable(\"account_id\", responseBody.data[index].id.split(\"b.\").join(\"\"));",
-							"    }",
-							"}",
-							""
+							"var bim_hub = responseBody.data.find( hub =>  hub.id.indexOf(\"b.\") !== -1);",
+							"if(bim_hub !== null ){",
+							"    ",
+							"    pm.environment.set(\"hub_id\",     bim_hub.id);",
+							"    pm.environment.set(\"account_id\", bim_hub.id.split('b.').join(''));",
+							"}"
 						],
 						"type": "text/javascript"
 					}
@@ -34,7 +89,7 @@
 					"script": {
 						"id": "8cfa97b8-c4f1-4a80-90e2-50e3e7a1dadb",
 						"exec": [
-							"pm.environment.unset(\"changeOrder_index\");"
+							""
 						],
 						"type": "text/javascript"
 					}
@@ -61,33 +116,28 @@
 			"name": "Step 2: Find projects within a BIM360 hub",
 			"event": [
 				{
-					"listen": "test",
+					"listen": "prerequest",
 					"script": {
-						"id": "511e384b-691e-40a2-9fe5-716e82dd7274",
+						"id": "e9eaa388-e0e3-4a45-88b1-447388b8b427",
 						"exec": [
-							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
-							"",
-							"// find the specified project and setup the environment variable \"project_id\"",
-							"var project_name =  pm.environment.get(\"project_name\");",
-							"var responseBody = JSON.parse(responseBody);",
-							"for ( var index in responseBody.data) {",
-							"    if(responseBody.data[index].attributes.name == project_name){",
-							"        postman.setEnvironmentVariable(\"project_id\", responseBody.data[index].id);",
-							"    }",
-							"}",
 							""
 						],
 						"type": "text/javascript"
 					}
 				},
 				{
-					"listen": "prerequest",
+					"listen": "test",
 					"script": {
-						"id": "da3a375e-4dc8-4a4b-9e08-bc185c8a8d8c",
+						"id": "d8af22df-95cf-4ba1-9858-aa483c84b543",
 						"exec": [
+							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+							"",
+							"// find the specified project and setup the environment variable \"project_id\"",
 							"var project_name =  pm.environment.get(\"project_name\");",
-							"if( project_name == null || project_name == '' ){",
-							"    pm.environment.set(\"project_name\", \"Change to your project name\");",
+							"var responseBody = JSON.parse(responseBody);",
+							"var project = responseBody.data.find(d => d.attributes.name == project_name)",
+							"if( project ){",
+							"    postman.setEnvironmentVariable(\"project_id\", project.id);",
 							"}"
 						],
 						"type": "text/javascript"
@@ -98,7 +148,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{base_domain}}/project/v1/hubs/{{hub_id}}/projects",
+					"raw": "{{base_domain}}/project/v1/hubs/{{hub_id}}/projects?page[limit]=200",
 					"host": [
 						"{{base_domain}}"
 					],
@@ -108,6 +158,12 @@
 						"hubs",
 						"{{hub_id}}",
 						"projects"
+					],
+					"query": [
+						{
+							"key": "page[limit]",
+							"value": "200"
+						}
 					]
 				}
 			},
@@ -125,7 +181,8 @@
 							"",
 							"// setup the environment variable \"cost_container_id\"",
 							"var responseBody = JSON.parse(responseBody);",
-							"postman.setEnvironmentVariable(\"cost_container_id\", responseBody.data.relationships.cost.data.id);"
+							"postman.setEnvironmentVariable(\"cost_container_id\", responseBody.data.relationships.cost.data.id);",
+							""
 						],
 						"type": "text/javascript"
 					}
@@ -182,7 +239,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n        \"parentId\": null,\n        \"code\": \"200420420378\",\n        \"name\": \"My 1st Budget\",\n        \"description\": \"new\",\n        \"quantity\": 10,\n        \"unitPrice\": \"1000.0000\",\n        \"unit\": \"LS\"\n}",
+					"raw": "{\n        \"parentId\": null,\n        \"code\": \"1111122222333334444455555\",\n        \"name\": \"My 1st Budget\",\n        \"description\": \"new\",\n        \"quantity\": 10,\n        \"unitPrice\": \"1000.0000\",\n        \"unit\": \"LS\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -321,7 +378,13 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": ""
+					"raw": "{{base_domain}}/health",
+					"host": [
+						"{{base_domain}}"
+					],
+					"path": [
+						"health"
+					]
 				},
 				"description": "Use different \"changeOrder_type\" to create differnt change order and execute actions on that. You can create different change order typs(Pco, Rfq, Rco, Oco, Sco) by following the workflow."
 			},
@@ -333,7 +396,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "7d16a9a4-c870-4cb6-9a45-f2c83c9916fd",
+						"id": "a4e53751-f00d-4046-b0a3-6e96e91b5739",
 						"exec": [
 							"pm.test(\"Status code is 200\", function () { ",
 							"    pm.response.to.have.status(200); ",
@@ -343,11 +406,14 @@
 							"",
 							"var index = pm.environment.get(\"changeOrder_index\");",
 							"// stop postman collection runner while index is out of range",
-							"if( index >= responseBody.length ){",
-							"    postman.setNextRequest('Stop the collection');",
+							"if( index < responseBody.length - 1 ){",
+							"    pm.environment.set(\"changeOrder_type\", responseBody[index].type);",
+							"    pm.environment.set(\"changeOrder_index\", index+1);",
 							"}else{",
-							"    postman.setEnvironmentVariable(\"changeOrder_type\", responseBody[index].type);",
+							"    pm.environment.set('Stop the collection');",
 							"}",
+							"",
+							"",
 							""
 						],
 						"type": "text/javascript"
@@ -356,17 +422,9 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "0235d5a1-7756-4956-95f6-4e1a7d6ab4ff",
+						"id": "d2f078d5-d413-4f91-b8f5-e9d263933bc0",
 						"exec": [
-							"",
-							"var index = pm.environment.get(\"changeOrder_index\");",
-							"if( index != null ){",
-							"    console.log(\"current change order index is: \" + (index+1));",
-							"    pm.environment.set(\"changeOrder_index\", index+1);",
-							"}else{",
-							"    console.log(\"current change order index is not set\");",
-							"    pm.environment.set(\"changeOrder_index\", 0);",
-							"}"
+							""
 						],
 						"type": "text/javascript"
 					}
@@ -537,7 +595,6 @@
 					"script": {
 						"id": "d7d8e12e-2ac3-41cb-8fd4-188c92561507",
 						"exec": [
-							"pm.environment.set(\"association_type\", \"FormInstance\");",
 							""
 						],
 						"type": "text/javascript"
@@ -563,7 +620,7 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/workflows/{{association_type}}/{{changeOrder_id}}/actions?",
+					"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/workflows/{{action_association_type}}/{{changeOrder_id}}/actions",
 					"host": [
 						"{{base_domain}}cost"
 					],
@@ -572,7 +629,7 @@
 						"containers",
 						"{{cost_container_id}}",
 						"workflows",
-						"{{association_type}}",
+						"{{action_association_type}}",
 						"{{changeOrder_id}}",
 						"actions"
 					],
@@ -617,10 +674,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "[\n    {\n      \"action\": \"{{action_name}}\",\n      \"associationId\": \"{{changeOrder_id}}\",\n      \"associationType\": \"{{association_type}}\",\n      \"options\": {}\n    }\n]"
+					"raw": "[\n    {\n      \"action\": \"{{action_name}}\",\n      \"associationId\": \"{{changeOrder_id}}\",\n      \"associationType\": \"{{action_association_type}}\",\n      \"options\": {}\n    }\n]"
 				},
 				"url": {
-					"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/workflows/actions?",
+					"raw": "{{base_domain}}cost/v1/containers/{{cost_container_id}}/workflows/actions",
 					"host": [
 						"{{base_domain}}cost"
 					],
@@ -648,7 +705,7 @@
 		"oauth2": [
 			{
 				"key": "accessToken",
-				"value": "",
+				"value": "eyJhbGciOiJIUzI1NiIsImtpZCI6Imp3dF9zeW1tZXRyaWNfa2V5In0.eyJzY29wZSI6WyJkYXRhOndyaXRlIiwiZGF0YTpyZWFkIiwiYWNjb3VudDpyZWFkIiwiYWNjb3VudDp3cml0ZSJdLCJjbGllbnRfaWQiOiJvR1hFTXl6aUFDVkpmTzBLSWdkUWgzVkRMSHhXbmtzTyIsImdyYW50X2lkIjoiVkdVSUlKUkU1anJkb3RCYUxZdjdPMU02S0JMc0dJdkQiLCJhdWQiOiJodHRwczovL2F1dG9kZXNrLmNvbS9hdWQvand0ZXhwNjAiLCJqdGkiOiI4NjhyWVNyMU5JMkxkdFZhMjhtU1JsbUFNWG4zWENBSnQwb3Z2V2tnRVN6N2N5YlR1aUtTZ05waGs4WjE2bmtsIiwidXNlcmlkIjoiNFY0V0tRSkdHUTdOIiwiZXhwIjoxNTg5MzU4MTM0fQ.laFqwLeiavUkEcytrAcnWVL6FtmLzldDVb50MZQqa9A",
 				"type": "string"
 			},
 			{
