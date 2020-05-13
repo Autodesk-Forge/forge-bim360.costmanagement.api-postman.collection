@@ -406,7 +406,7 @@
 							"",
 							"var index = pm.environment.get(\"changeOrder_index\");",
 							"// stop postman collection runner while index is out of range",
-							"if( index < responseBody.length - 1 ){",
+							"if( index < responseBody.length ){",
 							"    pm.environment.set(\"changeOrder_type\", responseBody[index].type);",
 							"    pm.environment.set(\"changeOrder_index\", index+1);",
 							"}else{",
