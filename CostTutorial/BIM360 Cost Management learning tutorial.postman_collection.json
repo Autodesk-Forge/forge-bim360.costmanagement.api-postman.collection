@@ -410,7 +410,7 @@
 							"    pm.environment.set(\"changeOrder_type\", responseBody[index].type);",
 							"    pm.environment.set(\"changeOrder_index\", index+1);",
 							"}else{",
-							"    pm.environment.set('Stop the collection');",
+							"    postman.setNextRequest('Stop the collection');",
 							"}",
 							"",
 							"",
