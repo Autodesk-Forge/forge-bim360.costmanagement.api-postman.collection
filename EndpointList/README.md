@@ -40,5 +40,9 @@ This folder contains a Postman Collection that includes all the current BIM360 C
 ## License
 This sample is licensed under the terms of the [MIT License](http://opensource.org/licenses/MIT). Please see the [LICENSE](LICENSE) file for full details.
 
+
+## Change History
+- Removed [**GET File Package Endpoint**](https://forge.autodesk.com/en/docs/bim360/v1/reference/http/cost-file-packages-GET/) since it was only included in public beta, and was deprecated during public release.
+
 ## Written by
 Zhong Wu [@johnonsoftware](https://twitter.com/johnonsoftware), [Forge Partner Development](http://forge.autodesk.com)
