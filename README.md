@@ -1,3 +1,6 @@
+<h1>DEPRECATED</h1>
+This repository has been deprecated and all its content was moved to the new one located here https://github.com/autodesk-platform-services/aps-bim360.costmanagement.api-postman.collection
+
 # BIM360 Cost Management API Documentation Postman Collection Git Repo
 
 This repository contains 2 API collections as follow for different purpose which could help you understand the usage of BIM 360 Cost Managment API:
